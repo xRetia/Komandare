@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Komandare —— UserLand Linux for Windows</title>
+<meta name="description" content="Komandare：基于 Cygwin 内核的 UserLand Linux 发行版，一个文件夹，完整 Unix 用户态与开发工具链，主机零痕迹。">
+<meta property="og:title" content="Komandare —— UserLand Linux for Windows">
+<meta property="og:description" content="A UserLand Linux distribution for Windows, built on the Cygwin kernel. One folder, full Unix userland, zero traces on the host.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://komandare.github.io/">
+<meta property="og:image" content="https://komandare.github.io/Source/logo.png">
+<link rel="icon" type="image/png" href="Source/logo.png">
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-soft: #161b22;
+    --panel: rgba(22, 27, 34, 0.72);
+    --border: rgba(255, 255, 255, 0.09);
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #01e3f8;
+    --accent-2: #2c95ff;
+    --pink: #f56ee2;
+    --green: #3fb950;
+    --radius: 14px;
+    --mono: "JetBrains Mono", "Cascadia Code", Consolas, "Courier New", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.65;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(60rem 30rem at 85% -10%, rgba(1, 227, 248, 0.12), transparent 60%),
+      radial-gradient(50rem 28rem at -10% 30%, rgba(44, 149, 255, 0.10), transparent 60%),
+      radial-gradient(40rem 24rem at 60% 110%, rgba(245, 110, 226, 0.07), transparent 60%);
+    background-attachment: fixed;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 48px; }
+  @media (max-width: 900px) { .wrap { padding: 0 28px; } }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    background: rgba(13, 17, 23, 0.72);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .inner {
+    max-width: 1080px; margin: 0 auto; padding: 0 48px;
+    height: 56px; display: flex; align-items: center; gap: 22px;
+  }
+  @media (max-width: 900px) { nav .inner { padding: 0 28px; } }
+  nav .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; letter-spacing: 0.3px; }
+  nav .brand img { width: 24px; height: 24px; border-radius: 5px; }
+  nav .brand b { color: var(--accent); }
+  nav a.link { color: var(--muted); text-decoration: none; font-size: 13.5px; transition: color .15s; }
+  nav a.link:hover { color: var(--text); }
+  nav .spacer { flex: 1; }
+  nav .btn {
+    text-decoration: none; font-size: 13px; font-weight: 600;
+    padding: 7px 14px; border-radius: 8px; transition: all .15s;
+  }
+  nav .btn.ghost { color: var(--text); border: 1px solid var(--border); }
+  nav .btn.ghost:hover { border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.05); }
+  nav .btn.accent {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #04131a; border: none;
+  }
+  nav .btn.accent:hover { filter: brightness(1.12); }
+
+  /* ---------- hero ---------- */
+  header.hero { padding: 88px 0 56px; text-align: center; }
+  .logo {
+    width: 120px; height: 120px; border-radius: 26px;
+    box-shadow: 0 0 0 1px var(--border), 0 18px 50px rgba(1, 227, 248, 0.15);
+    margin-bottom: 26px;
+  }
+  .hero h1 { font-size: clamp(40px, 7vw, 62px); font-weight: 800; letter-spacing: 1px; }
+  .hero h1 .k { color: var(--accent); }
+  .hero .tagline { margin-top: 14px; font-size: clamp(16px, 2.4vw, 19px); color: var(--muted); max-width: 640px; margin-inline: auto; }
+  .hero .tagline b { color: var(--text); font-weight: 600; }
+  .badges { margin-top: 24px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .badges img { height: 24px; border-radius: 4px; }
+  .hero-cta { margin-top: 34px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 26px; border-radius: 12px; font-size: 15px; font-weight: 700;
+    text-decoration: none; transition: transform .15s, box-shadow .15s, filter .15s;
+  }
+  .cta.primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #04161d; box-shadow: 0 10px 30px rgba(1, 227, 248, 0.25);
+  }
+  .cta.primary:hover { transform: translateY(-2px); filter: brightness(1.1); }
+  .cta.ghost {
+    border: 1px solid var(--border); color: var(--text);
+    background: rgba(255,255,255,.03);
+  }
+  .cta.ghost:hover { border-color: rgba(255,255,255,.25); transform: translateY(-2px); }
+
+  /* ---------- sections ---------- */
+  section { padding: 58px 0 8px; }
+  h2.sec {
+    font-size: 24px; font-weight: 700; margin-bottom: 30px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  h2.sec::before {
+    content: ""; width: 4px; height: 22px; border-radius: 2px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* feature grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .feature h3 { font-size: 16.5px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 9px; }
+  .feature h3 .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .feature p { font-size: 14px; color: var(--muted); }
+  .feature:hover { transform: translateY(-3px); border-color: rgba(255,255,255,.18); }
+  .feature { transition: transform .15s, border-color .15s; }
+
+  /* terminal mock */
+  .term {
+    background: #0a0e14;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 24px 70px rgba(0,0,0,.45);
+    font-family: var(--mono);
+  }
+  .term .bar { display: flex; align-items: center; gap: 7px; padding: 11px 16px; background: rgba(255,255,255,.04); border-bottom: 1px solid var(--border); }
+  .term .bar i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .term .bar i:nth-child(1) { background: #ff5f57; }
+  .term .bar i:nth-child(2) { background: #febc2e; }
+  .term .bar i:nth-child(3) { background: #28c840; }
+  .term .bar span { margin-left: 8px; font-size: 12px; color: var(--muted); }
+  .term .body { padding: 20px 26px; font-size: clamp(9.5px, 1.9vw, 13px); line-height: 1.55; overflow-x: auto; white-space: pre; max-width: 100%; }
+  .term .body .fig { color: var(--accent); }
+  .term .body .lab { font-weight: 700; }
+  .term .body .u { color: #e6edf3; }
+  .term .body .m { color: var(--muted); }
+  .term .body .p { color: var(--pink); }
+  .term .body .b { color: var(--accent-2); }
+  .term .body .w { color: #e6edf3; }
+  .term .body .g { color: var(--green); }
+  .term .body .y { color: #d29922; }
+  .term .body .c { color: var(--accent); }
+  .term .body .mg { color: #d2a8ff; }
+  .term .body .rd { color: #f85149; }
+  /* rainbow separator: 57 dashes cycling rygcbm */
+  .term .body .rb span:nth-child(6n+1) { color: #f85149; }
+  .term .body .rb span:nth-child(6n+2) { color: #d29922; }
+  .term .body .rb span:nth-child(6n+3) { color: #3fb950; }
+  .term .body .rb span:nth-child(6n+4) { color: #39c5cf; }
+  .term .body .rb span:nth-child(6n+5) { color: #2c95ff; }
+  .term .body .rb span:nth-child(6n)   { color: #d2a8ff; }
+
+  /* steps */
+  .steps { counter-reset: st; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+  .step { position: relative; }
+  .step::before {
+    counter-increment: st; content: counter(st, decimal-leading-zero);
+    position: absolute; top: 18px; right: 20px;
+    font-family: var(--mono); font-size: 30px; font-weight: 800;
+    color: rgba(255,255,255,.06);
+  }
+  .step h4 { font-size: 15.5px; margin-bottom: 6px; }
+  .step p { font-size: 13.5px; color: var(--muted); }
+  .step code { font-family: var(--mono); font-size: 12.5px; background: rgba(255,255,255,.07); padding: 1px 6px; border-radius: 5px; color: var(--accent); }
+
+  .term-body .k { color: var(--accent); }
+  /* diy section */
+  .diy-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 18px; align-items: start; }
+  @media (max-width: 860px) { .diy-grid { grid-template-columns: 1fr; } }
+  .diy-steps h4 { font-size: 15.5px; margin: 18px 0 6px; display: flex; align-items: center; gap: 9px; }
+  .diy-steps h4:first-child { margin-top: 0; }
+  .diy-steps h4 .n {
+    width: 22px; height: 22px; border-radius: 7px; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 12px; font-weight: 700; color: #04161d;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+  .diy-steps p { font-size: 13.5px; color: var(--muted); padding-left: 31px; }
+  .diy-steps code, .card p code {
+    font-family: var(--mono); font-size: 12.5px;
+    background: rgba(255,255,255,.07); padding: 1px 6px; border-radius: 5px;
+    color: var(--accent); white-space: nowrap;
+  }
+  .term .diy-body { padding: 18px 20px; font-size: clamp(9.5px, 1.9vw, 12.5px); line-height: 1.75; overflow-x: auto; white-space: pre; max-width: 100%; }
+  @media (max-width: 640px) {
+    .term .body { padding: 14px 12px; }
+    .term .diy-body { padding: 14px 12px; }
+  }
+  /* layout table */
+  .layout-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .layout-table th, .layout-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+  .layout-table th { color: var(--muted); font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: .6px; }
+  .layout-table td:first-child { font-family: var(--mono); font-size: 13px; color: var(--accent); white-space: nowrap; }
+  .layout-table tr:hover td { background: rgba(255,255,255,.025); }
+
+  /* download */
+  .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+  .dl-card { text-align: left; }
+  .dl-card .ver { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .dl-card h3 { margin: 6px 0 10px; font-size: 17px; }
+  .dl-card .btn-row { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  .dl-card .dl-btn {
+    flex: 1; text-align: center; text-decoration: none;
+    padding: 11px 16px; border-radius: 10px; font-size: 14px; font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #06231d; transition: filter .15s, transform .15s;
+  }
+  .dl-card .dl-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .dl-card .note { font-size: 12.5px; color: var(--muted); margin-top: 12px; }
+
+  /* footer */
+  footer { margin-top: 90px; border-top: 1px solid var(--border); padding: 34px 0 50px; text-align: center; color: var(--muted); font-size: 13px; }
+  footer .row { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  @media (max-width: 640px) {
+    nav .link { display: none; }
+    header.hero { padding-top: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <div class="brand"><img src="Source/logo.png" alt="Komandare logo"><span>Komand<span style="color:var(--accent)">are</span></span></div>
+    <a class="link" href="#features">特性</a>
+    <a class="link" href="#quickstart">快速开始</a>
+    <a class="link" href="#diy">DIY 模块</a>
+    <a class="link" href="#layout">目录结构</a>
+    <a class="link" href="#download">下载</a>
+    <div class="spacer"></div>
+    <a class="btn ghost" href="README.CN.md">中文文档</a>
+    <a class="btn ghost" href="README.md">EN Docs</a>
+    <a class="btn primary" href="https://github.com/xRetia/Komandare">GitHub</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <img class="logo" src="Source/logo.png" alt="Komandare logo">
+  <h1><span class="k">K</span>omandare</h1>
+  <p class="tagline">
+    <b>UserLand Linux for Windows</b> —— 基于 Cygwin 内核的开发者发行版。<br>
+    一个文件夹，完整 Unix 用户态与工具链，<b>主机零痕迹</b>。
+  </p>
+  <div class="badges">
+    <img src="https://badgen.net/github/tag/xRetia/Komandare?label=Latest%20Version&amp;color=blueviolet" alt="Latest Version">
+    <img src="https://badgen.net/github/release/xRetia/Komandare?label=Download&amp;color=blue" alt="Download">
+    <img src="https://img.shields.io/badge/homepage-komandare.github.io-01E3F8.svg" alt="Homepage">
+  </div>
+  <div class="hero-cta">
+    <a class="cta primary" href="#download">下载安装</a>
+    <a class="cta ghost" href="https://github.com/xRetia/Komandare/releases">查看 Release</a>
+  </div>
+</header>
+
+<!-- features -->
+<section id="features">
+  <h2 class="sec">真正的发行版，不是套壳</h2>
+  <div class="grid">
+    <div class="card feature">
+      <h3><span class="dot" style="background:var(--accent)"></span>内核：Cygwin</h3>
+      <p>UserLand Linux 发行版：内核是 Cygwin，用户态为开发者精心整合 —— bash、vim、git、curl、gcc 工具链、apt-cyg 包管理，一应俱全。</p>
+    </div>
+    <div class="card feature">
+      <h3><span class="dot" style="background:var(--green)"></span>主机零污染</h3>
+      <p>npm / pnpm / pip / playwright / Go 模块缓存、Gradle 用户目录、Ruby gems —— 全部收口到 Komandare 目录树内部。删掉文件夹，主机跟没装过一样。</p>
+    </div>
+    <div class="card feature">
+      <h3><span class="dot" style="background:var(--pink)"></span>kRun · 带环境跑 IDE</h3>
+      <p><code>kRun code .</code> —— 注入完整工具链后启动任意第三方程序。VSCode 等 IDE 直接看到整个 Komandare 环境。</p>
+    </div>
+    <div class="card feature">
+      <h3><span class="dot" style="background:var(--accent-2)"></span>便携模块</h3>
+      <p>工具链以可移植模块组织（Module/），kmod-setup 一键安装卸载。整个目录树可随意移动，甚至跨盘符。</p>
+    </div>
+  </div>
+</section>
+
+<!-- terminal mock: real neofetch output -->
+<section>
+  <div class="term">
+    <div class="bar"><i></i><i></i><i></i><span>komandare —— kmd</span></div>
+    <div class="body"><span class="m">demo@MYPC</span> <span class="c">~</span> <span class="p">$</span> <span class="w">ver</span>
+<span class="fig">    __ __                                __
+   / //_/___  ____ ___  ____ _____  ____/ /___ _________
+  / ,&lt; / __ \/ __ `__ \/ __ `/ __ \/ __  / __ `/ ___/ _ \
+ / /| / /_/ / / / / / / /_/ / / / / /_/ / /_/ / /  /  __/
+/_/ |_\\____/_/ /_/ /_/\__,_/_/ /_/\__,_/\__,_/_/   \___/</span>
+<span class="rb"><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span></span>
+
+<span class="lab" style="color:#3fb950">User           </span> : <span class="u">demo@MYPC</span>
+<span class="lab" style="color:#d29922">OS             </span> : <span class="u">Komandare</span>
+<span class="lab" style="color:#39c5cf">System Version </span> : <span class="g">4.0.2026.0910</span>
+<span class="lab" style="color:#d2a8ff">Kernel         </span> : <span class="u">CYGWIN 3.6.6</span>
+<span class="lab" style="color:#2c95ff">Shell          </span> : <span class="y">Komandare Shell</span>
+<span class="lab" style="color:#f85149">WCmdBox        </span> : <span class="c">20.08.1</span>
+<span class="lab" style="color:#e6edf3">Unique Libs    </span> : <span class="mg">/kbin [apt-cyg, kmod-setup, neofetch, sudo, wcmdbox, ...]</span>
+<span class="lab" style="color:#39c5cf">Project        </span> : <span class="b" style="font-weight:700">https://github.com/xRetia/Komandare</span>
+
+<span class="rb"><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span></span>
+<span class="rd" style="font-weight:700">Welcome to Komandare!</span></div>
+  </div>
+</section>
+
+<!-- quickstart -->
+<section id="quickstart">
+  <h2 class="sec">快速开始</h2>
+  <div class="steps">
+    <div class="card step">
+      <h4>启动 kmd</h4>
+      <p>双击 <code>kmd.exe</code>。优先使用 Windows Terminal，缺失时回退到内置 ConEmu。</p>
+    </div>
+    <div class="card step">
+      <h4>首次引导</h4>
+      <p>首次启动进入 <code>kmd-welcome</code> 全屏 TUI 向导，选择并安装所需模块。</p>
+    </div>
+    <div class="card step">
+      <h4>模块管理</h4>
+      <p><code>kmod-setup install python3x</code> —— 之后随时按需增删工具链。</p>
+    </div>
+    <div class="card step">
+      <h4>带走环境</h4>
+      <p>整个目录可拷贝到任意位置，<code>kInitrd.cmd</code> 自动重新锚定路径。</p>
+    </div>
+  </div>
+</section>
+
+<!-- DIY modules -->
+<section id="diy">
+  <h2 class="sec">DIY —— 拼装你自己的模块</h2>
+  <div class="diy-grid">
+    <div class="card diy-steps">
+      <h4><span class="n">1</span>放进去</h4>
+      <p>任何绿色软件丢进 <code>Module/&lt;name&gt;/</code> —— 目录名就是模块名。模块即文件夹，无需清单。</p>
+      <h4><span class="n">2</span>注册</h4>
+      <p><code>kmod-setup install &lt;name&gt;</code> 生成 <code>Config/Init.d/NN-&lt;name&gt;.cmd</code> loader，下次启动模块自动进 PATH。</p>
+      <h4><span class="n">3</span>打包分享</h4>
+      <p><code>kmod-setup export &lt;name&gt;</code> 导出 <code>.kmp</code> 包（zip，内含 <code>kmp.ini</code> + <code>loader.cmd</code> + <code>module/</code>），发给别人即可装。</p>
+      <h4><span class="n">4</span>分发与更新</h4>
+      <p><code>kmod-setup mirror</code> 切换下载源；用户用 <code>install &lt;name&gt; -r</code> 从 registry 拉取安装，<code>update</code> 检查远程更新，sha256 校验保证完整性。</p>
+    </div>
+    <div class="term">
+      <div class="bar"><i></i><i></i><i></i><span>komandare —— kmd</span></div>
+      <div class="body diy-body"><span class="m">demo@MYPC</span> <span class="c">~</span> <span class="p">$</span> <span class="w">kmod-setup install mytools 20 mytools 1.2.0 "Demo Labs"</span>
+<span class="g">kmod-setup: registered mytools v1.2.0 (Demo Labs) at priority 20</span>
+  module : <span class="u">C:\Komandare\Module\mytools</span>
+  loader : <span class="u">C:\Komandare\Config\Init.d\20-mytools.cmd</span>
+
+<span class="m">demo@MYPC</span> <span class="c">~</span> <span class="p">$</span> <span class="w">kmod-setup export mytools mytools-1.2.0.kmp</span>
+<span class="g">kmod-setup: exported mytools v1.2.0 -&gt; C:\Komandare\mytools-1.2.0.kmp</span>
+  payload: Module/mytools (14.2M)
+
+<span class="m">demo@MYPC</span> <span class="c">~</span> <span class="p">$</span> <span class="w">kmod-setup install mytools-1.2.0.kmp</span>
+<span class="g">kmod-setup: installed mytools v1.2.0 (Demo Labs)</span>
+  module : <span class="u">C:\Komandare\Module\mytools</span>
+  loader : <span class="u">C:\Komandare\Config\Init.d\10-mytools.cmd</span>
+<span class="g">kmod-setup: loader executed</span></div>
+    </div>
+  </div>
+  <p style="margin-top:18px; font-size:13.5px; color:var(--muted)">
+    也可以手工编写 loader —— <code>Config/Init.d/</code> 下的 <code>NN-*.cmd</code> 按 00—99 顺序在引导时执行，模块需要的环境变量、junction、缓存目录都可以写在这里 —— 这是扩展 Komandare 功能的标准姿势。
+  </p>
+</section>
+
+<!-- layout -->
+<section id="layout">
+  <h2 class="sec">目录结构</h2>
+  <div class="card">
+    <table class="layout-table">
+      <thead>
+        <tr><th>路径</th><th>角色</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>kmd.exe</td><td>推荐启动器（Windows Terminal 优先，ConEmu 兜底）</td></tr>
+        <tr><td>kRun.exe</td><td>在 kmd 环境内运行任意第三方程序</td></tr>
+        <tr><td>kBash.bat / kCmd.bat</td><td>从任意终端进入 kmd 环境</td></tr>
+        <tr><td>kInitrd.cmd</td><td>内核入口 —— 所有启动路径汇聚的引导加载器</td></tr>
+        <tr><td>Config/</td><td>启动器配置、模块注册（Init.d/）、别名、缓存策略、服务</td></tr>
+        <tr><td>Module/</td><td>工具链模块，每应用一个目录，由 Config/Init.d/*.cmd 注册</td></tr>
+        <tr><td>Binary/</td><td>便携独立工具与包装（caddy、mitmproxy、cygwin-setup ……）</td></tr>
+        <tr><td>Unixlike/</td><td>Cygwin 用户态：bin/、usr/、kbin/（内置命令）、etc/、home/</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- download -->
+<section id="download">
+  <h2 class="sec">下载</h2>
+  <div class="dl-grid">
+    <div class="card dl-card">
+      <div class="ver">stable · v4.0.2026.0910</div>
+      <h3>Windows 安装器</h3>
+      <p>NSIS 安装器，内置完整基础运行时（Unixlike + Config + Binary + 启动器），模块按需安装。</p>
+      <div class="btn-row">
+        <a class="dl-btn" href="https://github.com/xRetia/Komandare/releases/latest">下载 Setup.exe</a>
+      </div>
+      <div class="note">模块包（.kmp）与模块索引（registry.kp）亦在 Release 发布，安装后由 kmod-setup 自动拉取。</div>
+    </div>
+    <div class="card dl-card">
+      <div class="ver">source · 本仓库</div>
+      <h3>源码与文档</h3>
+      <p>启动器 C 源码（kmd.c）、构建脚本（build-release.ps1 / build_kmd.py）与项目 logo。</p>
+      <div class="btn-row">
+        <a class="dl-btn" href="https://github.com/xRetia/Komandare">访问仓库</a>
+      </div>
+      <div class="note">完整发行版目录树体积较大（约 3 GB），通过安装器分发的模块机制维护，不进入本仓库。</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="row">
+    <a href="README.CN.md">中文文档</a>
+    <a href="README.md">English Docs</a>
+    <a href="https://github.com/xRetia/Komandare">GitHub</a>
+    <a href="https://komandare.github.io/">Homepage</a>
+  </div>
+  <div>© 2020 - 2026 xRetia Labs. All rights reserved.</div>
+</footer>
+
+</body>
+</html>

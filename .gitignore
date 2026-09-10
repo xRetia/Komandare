@@ -1,0 +1,23 @@
+# Komandare —— 运行时安装目录（大体积目录树）
+# 本项目仓库仅承载发布文件，不包含运行时的完整目录树。
+
+# 运行时目录树
+/Binary/
+/Module/
+/Unixlike/
+/Config/
+/Console/
+/.release/
+/.temp/
+
+# 启动器二进制（由源码构建，不直接入库）
+/kmd.exe
+/kRun.exe
+
+# Windows 目录元数据
+desktop.ini
+Thumbs.db
+
+# 其他系统文件
+*.log
+.DS_Store
