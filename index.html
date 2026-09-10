@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Komandare —— UserLand Linux for Windows</title>
-<meta name="description" content="Komandare：基于 Cygwin 内核的 UserLand Linux 发行版，一个文件夹，完整 Unix 用户态与开发工具链，主机零痕迹。">
-<meta property="og:title" content="Komandare —— UserLand Linux for Windows">
+<title>Komandare — UserLand Linux for Windows</title>
+<meta name="description" content="Komandare: a UserLand Linux distribution built on the Cygwin kernel. One folder, full Unix userland and dev toolchains, zero traces on the host.">
+<meta property="og:title" content="Komandare — UserLand Linux for Windows">
 <meta property="og:description" content="A UserLand Linux distribution for Windows, built on the Cygwin kernel. One folder, full Unix userland, zero traces on the host.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://komandare.github.io/">
@@ -41,8 +41,6 @@
       radial-gradient(40rem 24rem at 60% 110%, rgba(245, 110, 226, 0.07), transparent 60%);
     background-attachment: fixed;
   }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 48px; }
-  @media (max-width: 900px) { .wrap { padding: 0 28px; } }
 
   /* ---------- nav ---------- */
   nav {
@@ -67,13 +65,14 @@
     text-decoration: none; font-size: 13px; font-weight: 600;
     padding: 7px 14px; border-radius: 8px; transition: all .15s;
   }
-  nav .btn.ghost { color: var(--text); border: 1px solid var(--border); }
+  nav .btn.ghost { color: var(--text); border: 1px solid var(--border); background: none; }
   nav .btn.ghost:hover { border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.05); }
   nav .btn.accent {
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     color: #04131a; border: none;
   }
   nav .btn.accent:hover { filter: brightness(1.12); }
+  nav .lang-btn { cursor: pointer; font-family: var(--sans); line-height: 1.2; }
 
   /* ---------- hero ---------- */
   header.hero { padding: 88px 48px 56px; text-align: center; }
@@ -116,6 +115,12 @@
   h2.sec::before {
     content: ""; width: 4px; height: 22px; border-radius: 2px;
     background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  }
+  h3.tool-title { font-size: 15.5px; font-weight: 700; margin-bottom: 16px; color: var(--text); display: flex; align-items: center; gap: 9px; }
+  h3.tool-title::before {
+    content: ""; width: 8px; height: 8px; border-radius: 3px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    flex-shrink: 0;
   }
 
   .card {
@@ -187,7 +192,6 @@
   .step p { font-size: 13.5px; color: var(--muted); }
   .step code { font-family: var(--mono); font-size: 12.5px; background: rgba(255,255,255,.07); padding: 1px 6px; border-radius: 5px; color: var(--accent); }
 
-  .term-body .k { color: var(--accent); }
   /* diy section */
   .diy-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 18px; align-items: start; }
   .diy-grid > * { min-width: 0; }
@@ -246,7 +250,7 @@
 
   @media (max-width: 640px) {
     nav .link { display: none; }
-    nav .btn.ghost { display: none; }
+    nav .btn.ghost:not(.lang-btn) { display: none; }
     nav .inner { padding: 0 16px; gap: 10px; }
     nav .brand { font-size: 14px; }
     nav .brand img { width: 21px; height: 21px; }
@@ -262,24 +266,25 @@
 <nav>
   <div class="inner">
     <div class="brand"><img src="Source/logo.png" alt="Komandare logo"><span>Komand<span style="color:var(--accent)">are</span></span></div>
-    <a class="link" href="#features">特性</a>
-    <a class="link" href="#quickstart">快速开始</a>
-    <a class="link" href="#diy">DIY 模块</a>
-    <a class="link" href="#layout">目录结构</a>
-    <a class="link" href="#download">下载</a>
+    <a class="link" href="#features" data-zh="特性">Features</a>
+    <a class="link" href="#quickstart" data-zh="快速开始">Quick Start</a>
+    <a class="link" href="#diy" data-zh="DIY 模块">DIY Modules</a>
+    <a class="link" href="#tools" data-zh="内置工具">Built-in Tools</a>
+    <a class="link" href="#layout" data-zh="目录结构">Layout</a>
+    <a class="link" href="#download" data-zh="下载">Download</a>
     <div class="spacer"></div>
-    <a class="btn ghost" href="README.CN.md">中文文档</a>
-    <a class="btn ghost" href="README.md">EN Docs</a>
-    <a class="btn primary" href="https://github.com/xRetia/Komandare">GitHub</a>
+    <button class="btn ghost lang-btn" id="langBtn" type="button">中文</button>
+    <a class="btn ghost docs-link" href="README.md" data-zh="文档">Docs</a>
+    <a class="btn accent" href="https://github.com/xRetia/Komandare">GitHub</a>
   </div>
 </nav>
 
 <header class="hero">
   <img class="logo" src="Source/logo.png" alt="Komandare logo">
   <h1><span class="k">K</span>omandare</h1>
-  <p class="tagline">
-    <b>UserLand Linux for Windows</b> —— 基于 Cygwin 内核的开发者发行版。<br>
-    一个文件夹，完整 Unix 用户态与工具链，<b>主机零痕迹</b>。
+  <p class="tagline" data-zh="&lt;b&gt;UserLand Linux for Windows&lt;/b&gt; —— 基于 Cygwin 内核的开发者发行版。&lt;br&gt;一个文件夹，完整 Unix 用户态与工具链，&lt;b&gt;主机零痕迹&lt;/b&gt;。">
+    <b>UserLand Linux for Windows</b> — a developer distro built on the Cygwin kernel.<br>
+    One folder, full Unix userland &amp; toolchains, <b>zero traces on the host</b>.
   </p>
   <div class="badges">
     <img src="https://badgen.net/github/tag/xRetia/Komandare?label=Latest%20Version&amp;color=blueviolet" alt="Latest Version">
@@ -287,30 +292,30 @@
     <img src="https://img.shields.io/badge/homepage-komandare.github.io-01E3F8.svg" alt="Homepage">
   </div>
   <div class="hero-cta">
-    <a class="cta primary" href="#download">下载安装</a>
-    <a class="cta ghost" href="https://github.com/xRetia/Komandare/releases">查看 Release</a>
+    <a class="cta primary" href="#download" data-zh="下载安装">Download &amp; Install</a>
+    <a class="cta ghost" href="https://github.com/xRetia/Komandare/releases" data-zh="查看 Release">View Releases</a>
   </div>
 </header>
 
 <!-- features -->
 <section id="features">
-  <h2 class="sec">真正的发行版，不是套壳</h2>
+  <h2 class="sec" data-zh="真正的发行版，不是套壳">A Real Distro, Not a Wrapper</h2>
   <div class="grid">
     <div class="card feature">
-      <h3><span class="dot" style="background:var(--accent)"></span>内核：Cygwin</h3>
-      <p>UserLand Linux 发行版：内核是 Cygwin，用户态为开发者精心整合 —— bash、vim、git、curl、gcc 工具链、apt-cyg 包管理，一应俱全。</p>
+      <h3><span class="dot" style="background:var(--accent)"></span><span data-zh="内核：Cygwin">Kernel: Cygwin</span></h3>
+      <p data-zh="UserLand Linux 发行版：内核是 Cygwin，用户态为开发者精心整合 —— bash、vim、git、curl、gcc 工具链、apt-cyg 包管理，一应俱全。">A UserLand Linux distribution: Cygwin as the kernel, a developer-curated userland — bash, vim, git, curl, gcc toolchains and apt-cyg package management, all bundled.</p>
     </div>
     <div class="card feature">
-      <h3><span class="dot" style="background:var(--green)"></span>主机零污染</h3>
-      <p>npm / pnpm / pip / playwright / Go 模块缓存、Gradle 用户目录、Ruby gems —— 全部收口到 Komandare 目录树内部。删掉文件夹，主机跟没装过一样。</p>
+      <h3><span class="dot" style="background:var(--green)"></span><span data-zh="主机零污染">Zero Host Pollution</span></h3>
+      <p data-zh="npm / pnpm / pip / playwright / Go 模块缓存、Gradle 用户目录、Ruby gems —— 全部收口到 Komandare 目录树内部。删掉文件夹，主机跟没装过一样。">npm / pnpm / pip / playwright / Go module caches, Gradle user dirs, Ruby gems — everything stays inside the Komandare tree. Delete the folder and the host looks untouched.</p>
     </div>
     <div class="card feature">
-      <h3><span class="dot" style="background:var(--pink)"></span>kRun · 带环境跑 IDE</h3>
-      <p><code>kRun code .</code> —— 注入完整工具链后启动任意第三方程序。VSCode 等 IDE 直接看到整个 Komandare 环境。</p>
+      <h3><span class="dot" style="background:var(--pink)"></span><span data-zh="kRun · 带环境跑 IDE">kRun · Launch IDEs with Env</span></h3>
+      <p data-zh="&lt;code&gt;kRun code .&lt;/code&gt; —— 注入完整工具链后启动任意第三方程序。VSCode 等 IDE 直接看到整个 Komandare 环境。"><code>kRun code .</code> — injects the complete toolchain before launching any third-party program. VSCode and other IDEs see the whole Komandare environment.</p>
     </div>
     <div class="card feature">
-      <h3><span class="dot" style="background:var(--accent-2)"></span>便携模块</h3>
-      <p>工具链以可移植模块组织（Module/），kmod-setup 一键安装卸载。整个目录树可随意移动，甚至跨盘符。</p>
+      <h3><span class="dot" style="background:var(--accent-2)"></span><span data-zh="便携模块">Portable Modules</span></h3>
+      <p data-zh="工具链以可移植模块组织（Module/），kmod-setup 一键安装卸载。整个目录树可随意移动，甚至跨盘符。">Toolchains are organized as portable modules (Module/), installed and removed by kmod-setup in one command. The whole tree moves freely — even across drives.</p>
     </div>
   </div>
 </section>
@@ -325,7 +330,7 @@
   / ,&lt; / __ \/ __ `__ \/ __ `/ __ \/ __  / __ `/ ___/ _ \
  / /| / /_/ / / / / / / /_/ / / / / /_/ / /_/ / /  /  __/
 /_/ |_\\____/_/ /_/ /_/\__,_/_/ /_/\__,_/\__,_/_/   \___/</span>
-<span class="rb"><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span></span>
+<span class="rb"><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span></span>
 
 <span class="lab" style="color:#3fb950">User           </span> : <span class="u">demo@MYPC</span>
 <span class="lab" style="color:#d29922">OS             </span> : <span class="u">Komandare</span>
@@ -343,40 +348,40 @@
 
 <!-- quickstart -->
 <section id="quickstart">
-  <h2 class="sec">快速开始</h2>
+  <h2 class="sec" data-zh="快速开始">Quick Start</h2>
   <div class="steps">
     <div class="card step">
-      <h4>启动 kmd</h4>
-      <p>双击 <code>kmd.exe</code>。优先使用 Windows Terminal，缺失时回退到内置 ConEmu。</p>
+      <h4 data-zh="启动 kmd">Launch kmd</h4>
+      <p data-zh="双击 &lt;code&gt;kmd.exe&lt;/code&gt;。优先使用 Windows Terminal，缺失时回退到内置 ConEmu。">Double-click <code>kmd.exe</code>. Prefers Windows Terminal; falls back to the bundled ConEmu.</p>
     </div>
     <div class="card step">
-      <h4>首次引导</h4>
-      <p>首次启动进入 <code>kmd-welcome</code> 全屏 TUI 向导，选择并安装所需模块。</p>
+      <h4 data-zh="首次引导">First Boot</h4>
+      <p data-zh="首次启动进入 &lt;code&gt;kmd-welcome&lt;/code&gt; 全屏 TUI 向导，选择并安装所需模块。">The first launch opens the <code>kmd-welcome</code> full-screen TUI wizard to pick and install modules.</p>
     </div>
     <div class="card step">
-      <h4>模块管理</h4>
-      <p><code>kmod-setup install python3x</code> —— 之后随时按需增删工具链。</p>
+      <h4 data-zh="模块管理">Manage Modules</h4>
+      <p data-zh="&lt;code&gt;kmod-setup install python3x&lt;/code&gt; —— 之后随时按需增删工具链。"><code>kmod-setup install python3x</code> — add or remove toolchains anytime.</p>
     </div>
     <div class="card step">
-      <h4>带走环境</h4>
-      <p>整个目录可拷贝到任意位置，<code>kInitrd.cmd</code> 自动重新锚定路径。</p>
+      <h4 data-zh="带走环境">Take It Anywhere</h4>
+      <p data-zh="整个目录可拷贝到任意位置，&lt;code&gt;kInitrd.cmd&lt;/code&gt; 自动重新锚定路径。">Copy the whole tree anywhere; <code>kInitrd.cmd</code> re-anchors all paths automatically.</p>
     </div>
   </div>
 </section>
 
 <!-- DIY modules -->
 <section id="diy">
-  <h2 class="sec">DIY —— 拼装你自己的模块</h2>
+  <h2 class="sec" data-zh="DIY —— 拼装你自己的模块">DIY — Build Your Own Modules</h2>
   <div class="diy-grid">
     <div class="card diy-steps">
-      <h4><span class="n">1</span>放进去</h4>
-      <p>任何绿色软件丢进 <code>Module/&lt;name&gt;/</code> —— 目录名就是模块名。模块即文件夹，无需清单。</p>
-      <h4><span class="n">2</span>注册</h4>
-      <p><code>kmod-setup install &lt;name&gt;</code> 生成 <code>Config/Init.d/NN-&lt;name&gt;.cmd</code> loader，下次启动模块自动进 PATH。</p>
-      <h4><span class="n">3</span>打包分享</h4>
-      <p><code>kmod-setup export &lt;name&gt;</code> 导出 <code>.kmp</code> 包（zip，内含 <code>kmp.ini</code> + <code>loader.cmd</code> + <code>module/</code>），发给别人即可装。</p>
-      <h4><span class="n">4</span>分发与更新</h4>
-      <p><code>kmod-setup mirror</code> 切换下载源；用户用 <code>kmod-setup install -r &lt;name&gt;</code> 从 registry 拉取安装，<code>kmod-setup update</code> 检查远程更新，sha256 校验保证完整性。</p>
+      <h4><span class="n">1</span><span data-zh="放进去">Drop It In</span></h4>
+      <p data-zh="任何绿色软件丢进 &lt;code&gt;Module/&lt;name&gt;/&lt;/code&gt; —— 目录名就是模块名。模块即文件夹，无需清单。">Toss any portable software into <code>Module/&lt;name&gt;/</code> — the folder name is the module name. A module is just a folder; no manifest needed.</p>
+      <h4><span class="n">2</span><span data-zh="注册">Register</span></h4>
+      <p data-zh="&lt;code&gt;kmod-setup install &lt;name&gt;&lt;/code&gt; 生成 &lt;code&gt;Config/Init.d/NN-&lt;name&gt;.cmd&lt;/code&gt; loader，下次启动模块自动进 PATH。"><code>kmod-setup install &lt;name&gt;</code> generates a <code>Config/Init.d/NN-&lt;name&gt;.cmd</code> loader; the module joins PATH on next boot.</p>
+      <h4><span class="n">3</span><span data-zh="打包分享">Pack &amp; Share</span></h4>
+      <p data-zh="&lt;code&gt;kmod-setup export &lt;name&gt;&lt;/code&gt; 导出 &lt;code&gt;.kmp&lt;/code&gt; 包（zip，内含 &lt;code&gt;kmp.ini&lt;/code&gt; + &lt;code&gt;loader.cmd&lt;/code&gt; + &lt;code&gt;module/&lt;/code&gt;），发给别人即可装。"><code>kmod-setup export &lt;name&gt;</code> produces a <code>.kmp</code> package (a zip with <code>kmp.ini</code> + <code>loader.cmd</code> + <code>module/</code>) — send it to anyone to install.</p>
+      <h4><span class="n">4</span><span data-zh="分发与更新">Distribute &amp; Update</span></h4>
+      <p data-zh="&lt;code&gt;kmod-setup mirror&lt;/code&gt; 切换下载源；用户用 &lt;code&gt;kmod-setup install -r &lt;name&gt;&lt;/code&gt; 从 registry 拉取安装，&lt;code&gt;kmod-setup update&lt;/code&gt; 检查远程更新，sha256 校验保证完整性。"><code>kmod-setup mirror</code> switches download sources; users run <code>kmod-setup install -r &lt;name&gt;</code> to pull from the registry, and <code>kmod-setup update</code> checks remote versions with sha256 verification.</p>
     </div>
     <div class="term">
       <div class="bar"><i></i><i></i><i></i><span>komandare —— kmd</span></div>
@@ -396,28 +401,28 @@
 <span class="g">kmod-setup: loader executed</span></div>
     </div>
   </div>
-  <p style="margin-top:18px; font-size:13.5px; color:var(--muted)">
-    也可以手工编写 loader —— <code>Config/Init.d/</code> 下的 <code>NN-*.cmd</code> 按 00—99 顺序在引导时执行，模块需要的环境变量、junction、缓存目录都可以写在这里 —— 这是扩展 Komandare 功能的标准姿势。
+  <p style="margin-top:18px; font-size:13.5px; color:var(--muted)" data-zh="也可以手工编写 loader —— &lt;code&gt;Config/Init.d/&lt;/code&gt; 下的 &lt;code&gt;NN-*.cmd&lt;/code&gt; 按 00—99 顺序在引导时执行，模块需要的环境变量、junction、缓存目录都可以写在这里 —— 这是扩展 Komandare 功能的标准姿势。">
+    You can also hand-write loaders — <code>NN-*.cmd</code> files under <code>Config/Init.d/</code> run in 00–99 order at boot; module env vars, junctions and cache dirs all belong there. It is the standard way to extend Komandare.
   </p>
 </section>
 
 <!-- layout -->
 <section id="layout">
-  <h2 class="sec">目录结构</h2>
+  <h2 class="sec" data-zh="目录结构">Directory Layout</h2>
   <div class="card">
     <table class="layout-table">
       <thead>
-        <tr><th>路径</th><th>角色</th></tr>
+        <tr><th data-zh="路径">Path</th><th data-zh="角色">Role</th></tr>
       </thead>
       <tbody>
-        <tr><td>kmd.exe</td><td>推荐启动器（Windows Terminal 优先，ConEmu 兜底）</td></tr>
-        <tr><td>kRun.exe</td><td>在 kmd 环境内运行任意第三方程序</td></tr>
-        <tr><td>kBash.bat / kCmd.bat</td><td>从任意终端进入 kmd 环境</td></tr>
-        <tr><td>kInitrd.cmd</td><td>内核入口 —— 所有启动路径汇聚的引导加载器</td></tr>
-        <tr><td>Config/</td><td>启动器配置、模块注册（Init.d/）、别名、缓存策略、服务</td></tr>
-        <tr><td>Module/</td><td>工具链模块，每应用一个目录，由 Config/Init.d/*.cmd 注册</td></tr>
-        <tr><td>Binary/</td><td>便携独立工具与包装（caddy、mitmproxy、cygwin-setup ……）</td></tr>
-        <tr><td>Unixlike/</td><td>Cygwin 用户态：bin/、usr/、kbin/（内置命令）、etc/、home/</td></tr>
+        <tr><td>kmd.exe</td><td data-zh="推荐启动器（Windows Terminal 优先，ConEmu 兜底）">Recommended launcher (Windows Terminal first, ConEmu fallback)</td></tr>
+        <tr><td>kRun.exe</td><td data-zh="在 kmd 环境内运行任意第三方程序">Run any third-party program inside the kmd environment</td></tr>
+        <tr><td>kBash.bat / kCmd.bat</td><td data-zh="从任意终端进入 kmd 环境">Enter the kmd environment from any terminal</td></tr>
+        <tr><td>kInitrd.cmd</td><td data-zh="内核入口 —— 所有启动路径汇聚的引导加载器">Kernel entry — the bootloader where every launch path converges</td></tr>
+        <tr><td>Config/</td><td data-zh="启动器配置、模块注册（Init.d/）、别名、缓存策略、服务">Launcher config, module registry (Init.d/), aliases, cache policies, services</td></tr>
+        <tr><td>Module/</td><td data-zh="工具链模块，每应用一个目录，由 Config/Init.d/*.cmd 注册">Toolchain modules, one folder per app, registered via Config/Init.d/*.cmd</td></tr>
+        <tr><td>Binary/</td><td data-zh="便携独立工具与包装（caddy、mitmproxy、cygwin-setup ……）">Portable standalone tools &amp; wrappers (caddy, mitmproxy, cygwin-setup, ...)</td></tr>
+        <tr><td>Unixlike/</td><td data-zh="Cygwin 用户态：bin/、usr/、kbin/（内置命令）、etc/、home/">Cygwin userland: bin/, usr/, kbin/ (built-in commands), etc/, home/</td></tr>
       </tbody>
     </table>
   </div>
@@ -425,38 +430,184 @@
 
 <!-- download -->
 <section id="download">
-  <h2 class="sec">下载</h2>
+  <h2 class="sec" data-zh="下载">Download</h2>
   <div class="dl-grid">
     <div class="card dl-card">
       <div class="ver">stable · v4.0.2026.0910</div>
-      <h3>Windows 安装器</h3>
-      <p>NSIS 安装器，内置完整基础运行时（Unixlike + Config + Binary + 启动器），模块按需安装。</p>
+      <h3 data-zh="Windows 安装器">Windows Installer</h3>
+      <p data-zh="NSIS 安装器，内置完整基础运行时（Unixlike + Config + Binary + 启动器），模块按需安装。">NSIS installer bundling the full base runtime (Unixlike + Config + Binary + launchers); modules are installed on demand.</p>
       <div class="btn-row">
-        <a class="dl-btn" href="https://github.com/xRetia/Komandare/releases/latest">下载 Setup.exe</a>
+        <a class="dl-btn" href="https://github.com/xRetia/Komandare/releases/latest" data-zh="下载 Setup.exe">Download Setup.exe</a>
       </div>
-      <div class="note">模块包（.kmp）与模块索引（registry.kp）亦在 Release 发布，安装后由 kmod-setup 自动拉取。</div>
+      <div class="note" data-zh="模块包（.kmp）与模块索引（registry.kp）亦在 Release 发布，安装后由 kmod-setup 自动拉取。">Module packages (.kmp) and the module index (registry.kp) are also published on Releases, pulled automatically by kmod-setup after install.</div>
     </div>
     <div class="card dl-card">
-      <div class="ver">source · 本仓库</div>
-      <h3>源码与文档</h3>
-      <p>启动器 C 源码（kmd.c）、构建脚本（build-release.ps1 / build_kmd.py）与项目 logo。</p>
+      <div class="ver" data-zh="source · 本仓库">source · this repo</div>
+      <h3 data-zh="源码与文档">Source &amp; Docs</h3>
+      <p data-zh="启动器 C 源码（kmd.c）、构建脚本（build-release.ps1 / build_kmd.py）与项目 logo。">Launcher C source (kmd.c), build scripts (build-release.ps1 / build_kmd.py) and the project logo.</p>
       <div class="btn-row">
-        <a class="dl-btn" href="https://github.com/xRetia/Komandare">访问仓库</a>
+        <a class="dl-btn" href="https://github.com/xRetia/Komandare" data-zh="访问仓库">Visit the Repo</a>
       </div>
-      <div class="note">完整发行版目录树体积较大（约 3 GB），通过安装器分发的模块机制维护，不进入本仓库。</div>
+      <div class="note" data-zh="完整发行版目录树体积较大（约 3 GB），通过安装器分发的模块机制维护，不进入本仓库。">The full distro tree is large (~3 GB) and maintained through the installer's module system — it never enters this repo.</div>
     </div>
+  </div>
+</section>
+
+<!-- built-in tools -->
+<section id="tools">
+  <h2 class="sec" data-zh="内置工具">Built-in Tools</h2>
+
+  <div class="card" style="margin-bottom:18px">
+    <h3 class="tool-head" data-zh="/kbin —— 命令层（优先于常规 bin）">/kbin — the command layer (takes precedence over regular bin)</h3>
+    <table class="layout-table">
+      <thead>
+        <tr><th data-zh="命令">Command</th><th data-zh="作用">What it does</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>apt-cyg</td><td data-zh="Cygwin 包管理器（别名 apt / apt-get / yum / apk）">Cygwin package manager (aliases: apt, apt-get, yum, apk)</td></tr>
+        <tr><td>kmod-setup</td><td data-zh="模块系统包管理器（install / export / update / mirror）">Module system package manager (install / export / update / mirror)</td></tr>
+        <tr><td>kmd-welcome</td><td data-zh="首次运行设置向导（全屏 TUI）">First-run setup wizard (full-screen TUI)</td></tr>
+        <tr><td>ver / version</td><td data-zh="neofetch + 发行版版本（-s 仅输出版本）">neofetch + distro version (-s prints just the version)</td></tr>
+        <tr><td>neofetch</td><td data-zh="系统信息展示">System info display</td></tr>
+        <tr><td>sudo / su</td><td data-zh="Windows UAC 提权开新 root 窗口（root 无密码）；unroot 恢复普通用户映射">Trigger a Windows UAC elevation that opens a new root kmd window; unroot restores the normal-user mapping</td></tr>
+        <tr><td>wcmdbox / mobabox</td><td data-zh="Windows 命令盒 —— 提供 ifconfig / hwinfo 等网络与硬件信息">Windows command box — powers ifconfig / hwinfo network &amp; hardware info</td></tr>
+        <tr><td>ps / top / killall</td><td data-zh="进程观察（Windows 感知）">Process observation (Windows-aware)</td></tr>
+        <tr><td>mkrootfs</td><td data-zh="重建 kmod / kconf / tmp 文本符号链接（幂等）">Rebuild the kmod / kconf / tmp text-symlinks (idempotent)</td></tr>
+        <tr><td>phptest</td><td data-zh="PHP 快速试验台：临时 .php 用 nano 打开后运行">Quick PHP scratchpad: opens a temp .php in nano, then runs it</td></tr>
+        <tr><td>mklink / attrib / dir</td><td data-zh="Windows 链接/属性/列目录的 bash 风格桥接">bash-style bridges for Windows mklink / attrib / dir</td></tr>
+        <tr><td>runas_root / runas_user</td><td data-zh="按提权状态重映射 /etc/passwd">Remap /etc/passwd based on elevated status</td></tr>
+        <tr><td>reset / poweroff / reboot</td><td data-zh="控制台重置与关/重启 Windows">Console reset &amp; Windows power / reboot helpers</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-bottom:18px">
+    <h3 class="tool-title" data-zh="别名 —— 常用命令捷径（Config/SystemAliases.ini，可用 UserAliases.ini 覆盖）">Aliases — everyday shortcuts (Config/SystemAliases.ini, overridable via UserAliases.ini)</h3>
+    <table class="layout-table">
+      <thead>
+        <tr><th data-zh="别名">Alias</th><th data-zh="指向">Points to</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>apt / apt-get / yum / apk</td><td data-zh="bash apt-cyg —— Cygwin 包管理器">bash apt-cyg — the Cygwin package manager</td></tr>
+        <tr><td>sudo</td><td data-zh="gsudo —— 弹 UAC 提权执行">gsudo — elevate via a UAC prompt</td></tr>
+        <tr><td>su / nosu</td><td data-zh="sh /kbin/su · sh /kbin/unroot —— 切换到 root 窗口 / 恢复普通用户">sh /kbin/su · sh /kbin/unroot — switch to a root window / restore the normal-user mapping</td></tr>
+        <tr><td>ver / version</td><td data-zh="sh /kbin/version —— neofetch + 发行版版本">sh /kbin/version — neofetch + distro version</td></tr>
+        <tr><td>gl</td><td data-zh="git log --oneline --all --graph --decorate">git log --oneline --all --graph --decorate</td></tr>
+        <tr><td>gm</td><td data-zh="git add . && git commit -m &lt;msg&gt; && git push —— 一键提交推送">git add . && git commit -m &lt;msg&gt; && git push — commit &amp; push in one go</td></tr>
+        <tr><td>vi</td><td data-zh="vim —— 常用编辑器">vim — the everyday editor</td></tr>
+        <tr><td>np</td><td data-zh="notepad —— Windows 记事本">notepad — Windows Notepad</td></tr>
+        <tr><td>ls / la / ll</td><td data-zh="带 --color=auto 并忽略 NTUSER.* / ntuser.* 的 ls">ls with --color=auto, skipping NTUSER.* / ntuser.*</td></tr>
+        <tr><td>d / desktop</td><td data-zh="cd $DESKTOP —— 直达桌面">cd $DESKTOP — jump to the desktop</td></tr>
+        <tr><td>e.</td><td data-zh="explorer . —— 在资源管理器中打开当前目录">explorer . — open the current dir in Explorer</td></tr>
+        <tr><td>ifconfig / hwinfo</td><td data-zh="mobabox ifconfig / hwinfo —— 网络与硬件信息">mobabox ifconfig / hwinfo — network &amp; hardware info</td></tr>
+        <tr><td>mtr</td><td data-zh="ntr —— 网络流量回放分析">ntr — network traffic replay &amp; analysis</td></tr>
+        <tr><td>webd</td><td data-zh="python3 -m http.server —— 快速起一个 HTTP 服务">python3 -m http.server — quick HTTP server</td></tr>
+        <tr><td>clear / cls</td><td data-zh="cmd /c clear · cmd /c cls —— 清屏">cmd /c clear · cmd /c cls — clear the screen</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-bottom:18px">
+    <h3 class="tool-title" data-zh="Binary/ — 便携独立工具（自动进 PATH）">Binary/ — portable standalone tools (auto on PATH)</h3>
+    <table class="layout-table">
+      <thead>
+        <tr><th data-zh="工具">Tool</th><th data-zh="用途">Use</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>caddy</td><td data-zh="轻量 HTTP / 反向代理服务器">Lightweight HTTP / reverse-proxy server</td></tr>
+        <tr><td>mitmproxy / mitmdump / mitmweb</td><td data-zh="交互式 HTTPS 拦截与分析">Interactive HTTPS interception &amp; analysis</td></tr>
+        <tr><td>plink / scp / sftp</td><td data-zh="PuTTY SSH CLI 客户端">PuTTY SSH CLI clients</td></tr>
+        <tr><td>tcping</td><td data-zh="TCP ping —— 探测端口是否可连">TCP ping — check if a port accepts connections</td></tr>
+        <tr><td>RawCap</td><td data-zh="本地接口原始流量抓包存为 pcap">Capture raw traffic on a local interface to a pcap file</td></tr>
+        <tr><td>streams / streams64</td><td data-zh="剥离 NTFS 备用数据流（Mark-of-the-Web）">Strip NTFS Alternate Data Streams (Mark-of-the-Web)</td></tr>
+        <tr><td>cygwin-setup</td><td data-zh="官方 Cygwin setup-x86_64.exe（完整包管理）">Official Cygwin setup-x86_64.exe (full package manager)</td></tr>
+        <tr><td>composer / phpunit</td><td data-zh="PHP 依赖管理 / 测试运行器（.phar 包装）">PHP dependency manager / PHPUnit test runner (.phar wrappers)</td></tr>
+        <tr><td>binwalk / jefferson</td><td data-zh="固件提取与文件系统分析（Python 工具前端）">Firmware extraction &amp; file-system analysis (front-ends for the Python tools in Module/)</td></tr>
+        <tr><td>service</td><td data-zh="服务管理分发器（docker start/stop/reset ……）">The service manager dispatcher (docker start/stop/reset, ...)</td></tr>
+        <tr><td>desktopini</td><td data-zh="交互式设置文件夹显示名/图标（desktop.ini）">Interactively set a folder's display name / icon via desktop.ini</td></tr>
+        <tr><td>pptp-dial</td><td data-zh="拨号 / 断开 PPTP VPN（dial &lt;addr&gt; &lt;user&gt; &lt;pass&gt;）">Dial / disconnect a PPTP VPN (dial &lt;addr&gt; &lt;user&gt; &lt;pass&gt;)</td></tr>
+        <tr><td>MoveLater</td><td data-zh="把文件删除推迟到下次重启">Defer a file deletion to the next reboot</td></tr>
+        <tr><td>kmd_reset</td><td data-zh="重置 ConEmu 标签标题为 Komandare">Reset the ConEmu tab title to "Komandare"</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 class="tool-title" data-zh="Module/ —— 可选工具链模块（kmod-setup 一键装）">Module/ — optional toolchain modules (one-command install via kmod-setup)</h3>
+    <table class="layout-table">
+      <thead>
+        <tr><th data-zh="模块">Module</th><th data-zh="内容">Contents</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>python3x</td><td data-zh="Python 3.12 —— pip 缓存、Playwright 浏览器、user-site 全收口在模块内">Python 3.12 — pip cache, Playwright browsers, user-site all inside the module</td></tr>
+        <tr><td>nodejs</td><td data-zh="Node.js + npm / pnpm / npx（缓存收口在模块内）">Node.js + npm / pnpm / npx (caches contained)</td></tr>
+        <tr><td>golang</td><td data-zh="Go 工具链 —— GOMODCACHE 等全在模块内">Go toolchain — GOMODCACHE &amp; co. inside the module</td></tr>
+        <tr><td>gradle</td><td data-zh="Gradle 构建（GRADLE_USER_HOME 收口）">Gradle build tool (GRADLE_USER_HOME contained)</td></tr>
+        <tr><td>php</td><td data-zh="PHP CLI + composer（含 phptest 试验台）">PHP CLI + composer (with the phptest scratchpad)</td></tr>
+        <tr><td>ruby / ruby4</td><td data-zh="Ruby 两套版本（gems 收口在模块内）">Two Ruby stacks (gems contained)</td></tr>
+        <tr><td>qemu</td><td data-zh="QEMU 虚拟机（配合 vbox-helper）">QEMU VM (with vbox-helper)</td></tr>
+        <tr><td>adb / fastboot</td><td data-zh="Android 调试桥与刷机工具">Android debug bridge &amp; flashing tools</td></tr>
+        <tr><td>gsudo</td><td data-zh="sudo 的 UAC 提权后端">UAC elevation backend for sudo</td></tr>
+        <tr><td>7zip / unzip</td><td data-zh="压缩工具链">Archive toolchain</td></tr>
+        <tr><td>dig / iperf3 / socat</td><td data-zh="DNS 查询 / 网络测速 / socket 中继">DNS lookup / network perf / socket relay</td></tr>
+        <tr><td>lessc / ntr</td><td data-zh="Less 编译器 / 网络流量回放分析">Less compiler / network traffic replay &amp; analysis</td></tr>
+        <tr><td>selfsign-ssl</td><td data-zh="自签名 SSL 证书生成器">Self-signed SSL certificate generator</td></tr>
+        <tr><td>squashfs-tools</td><td data-zh="squashfs 只读文件系统打包/解包">squashfs image pack/unpack</td></tr>
+        <tr><td>windows-driver-sign</td><td data-zh="Windows 驱动签名工具链">Windows driver signing toolchain</td></tr>
+        <tr><td>vbox-helper</td><td data-zh="VirtualBox 辅助（service docker 后端）">VirtualBox helper (backend for service docker)</td></tr>
+        <tr><td>z-cache-clean</td><td data-zh="启动时按 CacheClean.ini 自动维护各模块缓存">Auto-maintains module caches at boot per CacheClean.ini</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
 <footer>
   <div class="row">
-    <a href="README.CN.md">中文文档</a>
-    <a href="README.md">English Docs</a>
+    <a href="README.md" class="docs-link" data-zh="文档">Docs</a>
     <a href="https://github.com/xRetia/Komandare">GitHub</a>
     <a href="https://komandare.github.io/">Homepage</a>
   </div>
   <div>© 2020 - 2026 xRetia Labs. All rights reserved.</div>
 </footer>
+
+<script>
+(function () {
+  var saved = null;
+  try { saved = localStorage.getItem('kmd-lang'); } catch (e) {}
+  var lang = saved === 'zh' ? 'zh' : 'en';
+
+  function apply(l) {
+    lang = l;
+    document.documentElement.lang = (l === 'zh') ? 'zh-CN' : 'en';
+    var nodes = document.querySelectorAll('[data-zh]');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      if (!el.getAttribute('data-en')) el.setAttribute('data-en', el.innerHTML);
+      el.innerHTML = (l === 'zh') ? el.getAttribute('data-zh') : el.getAttribute('data-en');
+    }
+    var title = document.querySelector('title');
+    var desc = document.querySelector('meta[name="description"]');
+    if (l === 'zh') {
+      title.textContent = 'Komandare —— UserLand Linux for Windows';
+      desc.setAttribute('content', 'Komandare：基于 Cygwin 内核的 UserLand Linux 发行版，一个文件夹，完整 Unix 用户态与开发工具链，主机零痕迹。');
+    } else {
+      title.textContent = 'Komandare — UserLand Linux for Windows';
+      desc.setAttribute('content', 'Komandare: a UserLand Linux distribution built on the Cygwin kernel. One folder, full Unix userland and dev toolchains, zero traces on the host.');
+    }
+    var docs = document.querySelectorAll('.docs-link');
+    for (var j = 0; j < docs.length; j++) {
+      docs[j].setAttribute('href', (l === 'zh') ? 'README.CN.md' : 'README.md');
+    }
+    var btn = document.getElementById('langBtn');
+    if (btn) btn.textContent = (l === 'zh') ? 'EN' : '中文';
+    try { localStorage.setItem('kmd-lang', l); } catch (e) {}
+  }
+
+  var btn = document.getElementById('langBtn');
+  if (btn) btn.addEventListener('click', function () { apply(lang === 'zh' ? 'en' : 'zh'); });
+  apply(lang);
+})();
+</script>
 
 </body>
 </html>

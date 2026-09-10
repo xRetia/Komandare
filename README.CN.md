@@ -1,14 +1,3 @@
----
-AIGC:
-  ContentProducer: '001191110102MAD55U9H0F10002'
-  ContentPropagator: '001191110102MAD55U9H0F10002'
-  Label: '1'
-  ProduceID: '9c505dbd-138f-4c61-8381-3451b05cf6c7'
-  PropagateID: '9c505dbd-138f-4c61-8381-3451b05cf6c7'
-  ReservedCode1: '626cda56-2a4a-41f3-9b34-9fb82dc1a53c'
-  ReservedCode2: '626cda56-2a4a-41f3-9b34-9fb82dc1a53c'
----
-
 <h1 align="center">Komandare</h1>
 
 <p align="center">
@@ -55,18 +44,27 @@ Copyright(c) xRetia Labs.
 接着是 `ver` —— neofetch 加发行版版本信息：
 
 ```
-==================== Komandare ====================
+    __ __                                __
+   / //_/___  ____ ___  ____ _____  ____/ /___ _________
+  / ,< / __ \/ __ `__ \/ __ `/ __ \/ __  / __ `/ ___/ _ \
+ / /| / /_/ / / / / / / /_/ / / / / /_/ / /_/ / /  /  __/
+/_/ |_\____/_/ /_/ /_/\__,_/_/ /_/\__,_/\__,_/_/   \___/
+
 ------------------------------------------------------------
-User           : xRetia@MYPC
-OS             : Komandare
-System Version : 4.0.2026.0910
-Kernel         : CYGWIN 3.5
-Shell          : Komandare Shell
-WCmdBox        : 20.08.1
-Unique Libs    : /kbin [kmod-setup, neofetch, wcmdbox, ...]
-Project        : https://github.com/xRetia/Komandare
+
+User             : demo@MYPC
+OS               : Komandare
+System Version   : 4.0.2026.0910
+Kernel           : CYGWIN 3.6.6
+Shell            : Komandare Shell
+WCmdBox          : 20.08.1
+Unique Libs      : /kbin [adb, apt-cyg, attrib, binwalk, dir, fastboot, jefferson, killall, kmd-welcome, kmod-setup, mklink, mkrootfs, neofetch, phptest, poweroff, ps, reboot, reset, runas_root, runas_user, su, sudo, top, unroot, ver, version, wcmdbox]
+Project          : https://github.com/xRetia/Komandare
+
 ------------------------------------------------------------
 Welcome to Komandare!
+Komandare Version: 4.0.2026.0910
+Copyright (c)2026 xRetia Labs
 ```
 
 ---
