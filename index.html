@@ -76,7 +76,8 @@
   nav .btn.accent:hover { filter: brightness(1.12); }
 
   /* ---------- hero ---------- */
-  header.hero { padding: 88px 0 56px; text-align: center; }
+  header.hero { padding: 88px 48px 56px; text-align: center; }
+  @media (max-width: 900px) { header.hero { padding: 72px 28px 48px; } }
   .logo {
     width: 120px; height: 120px; border-radius: 26px;
     box-shadow: 0 0 0 1px var(--border), 0 18px 50px rgba(1, 227, 248, 0.15);
@@ -106,7 +107,8 @@
   .cta.ghost:hover { border-color: rgba(255,255,255,.25); transform: translateY(-2px); }
 
   /* ---------- sections ---------- */
-  section { padding: 58px 0 8px; }
+  section { padding: 58px 48px 8px; }
+  @media (max-width: 900px) { section { padding: 48px 28px 8px; } }
   h2.sec {
     font-size: 24px; font-weight: 700; margin-bottom: 30px;
     display: flex; align-items: center; gap: 12px;
@@ -123,10 +125,11 @@
     padding: 26px 28px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    min-width: 0;
   }
 
   /* feature grid */
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 18px; }
   .feature h3 { font-size: 16.5px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 9px; }
   .feature h3 .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
   .feature p { font-size: 14px; color: var(--muted); }
@@ -141,6 +144,8 @@
     overflow: hidden;
     box-shadow: 0 24px 70px rgba(0,0,0,.45);
     font-family: var(--mono);
+    min-width: 0;
+    max-width: 100%;
   }
   .term .bar { display: flex; align-items: center; gap: 7px; padding: 11px 16px; background: rgba(255,255,255,.04); border-bottom: 1px solid var(--border); }
   .term .bar i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
@@ -170,7 +175,7 @@
   .term .body .rb span:nth-child(6n)   { color: #d2a8ff; }
 
   /* steps */
-  .steps { counter-reset: st; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+  .steps { counter-reset: st; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 18px; }
   .step { position: relative; }
   .step::before {
     counter-increment: st; content: counter(st, decimal-leading-zero);
@@ -185,6 +190,7 @@
   .term-body .k { color: var(--accent); }
   /* diy section */
   .diy-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 18px; align-items: start; }
+  .diy-grid > * { min-width: 0; }
   @media (max-width: 860px) { .diy-grid { grid-template-columns: 1fr; } }
   .diy-steps h4 { font-size: 15.5px; margin: 18px 0 6px; display: flex; align-items: center; gap: 9px; }
   .diy-steps h4:first-child { margin-top: 0; }
@@ -206,14 +212,18 @@
     .term .diy-body { padding: 14px 12px; }
   }
   /* layout table */
-  .layout-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  .layout-table th, .layout-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+  .layout-table { width: 100%; border-collapse: collapse; font-size: 14px; table-layout: auto; min-width: 0; }
+  .layout-table th, .layout-table td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); word-break: break-word; }
   .layout-table th { color: var(--muted); font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: .6px; }
   .layout-table td:first-child { font-family: var(--mono); font-size: 13px; color: var(--accent); white-space: nowrap; }
   .layout-table tr:hover td { background: rgba(255,255,255,.025); }
+  @media (max-width: 640px) {
+    .layout-table td:first-child { white-space: normal; word-break: break-word; }
+    .layout-table td { padding: 9px 10px; }
+  }
 
   /* download */
-  .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+  .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 18px; }
   .dl-card { text-align: left; }
   .dl-card .ver { font-family: var(--mono); font-size: 12px; color: var(--muted); }
   .dl-card h3 { margin: 6px 0 10px; font-size: 17px; }
@@ -228,14 +238,22 @@
   .dl-card .note { font-size: 12.5px; color: var(--muted); margin-top: 12px; }
 
   /* footer */
-  footer { margin-top: 90px; border-top: 1px solid var(--border); padding: 34px 0 50px; text-align: center; color: var(--muted); font-size: 13px; }
+  footer { margin-top: 90px; border-top: 1px solid var(--border); padding: 34px 48px 50px; text-align: center; color: var(--muted); font-size: 13px; }
+  @media (max-width: 900px) { footer { padding: 30px 28px 44px; } }
   footer .row { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
   footer a { color: var(--muted); text-decoration: none; }
   footer a:hover { color: var(--accent); }
 
   @media (max-width: 640px) {
     nav .link { display: none; }
-    header.hero { padding-top: 60px; }
+    nav .btn.ghost { display: none; }
+    nav .inner { padding: 0 16px; gap: 10px; }
+    nav .brand { font-size: 14px; }
+    nav .brand img { width: 21px; height: 21px; }
+    nav .btn.accent { padding: 6px 11px; font-size: 12.5px; }
+    header.hero { padding: 60px 20px 44px; }
+    section { padding: 44px 20px 8px; }
+    footer { padding: 28px 20px 44px; }
   }
 </style>
 </head>
@@ -358,7 +376,7 @@
       <h4><span class="n">3</span>打包分享</h4>
       <p><code>kmod-setup export &lt;name&gt;</code> 导出 <code>.kmp</code> 包（zip，内含 <code>kmp.ini</code> + <code>loader.cmd</code> + <code>module/</code>），发给别人即可装。</p>
       <h4><span class="n">4</span>分发与更新</h4>
-      <p><code>kmod-setup mirror</code> 切换下载源；用户用 <code>install &lt;name&gt; -r</code> 从 registry 拉取安装，<code>update</code> 检查远程更新，sha256 校验保证完整性。</p>
+      <p><code>kmod-setup mirror</code> 切换下载源；用户用 <code>kmod-setup install -r &lt;name&gt;</code> 从 registry 拉取安装，<code>kmod-setup update</code> 检查远程更新，sha256 校验保证完整性。</p>
     </div>
     <div class="term">
       <div class="bar"><i></i><i></i><i></i><span>komandare —— kmd</span></div>

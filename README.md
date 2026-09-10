@@ -3,10 +3,10 @@ AIGC:
   ContentProducer: '001191110102MAD55U9H0F10002'
   ContentPropagator: '001191110102MAD55U9H0F10002'
   Label: '1'
-  ProduceID: 'c94b47e6-61dd-4a38-b53b-485b28225496'
-  PropagateID: 'c94b47e6-61dd-4a38-b53b-485b28225496'
-  ReservedCode1: 'b6d27ebe-c816-4b84-9c90-f89997ec1468'
-  ReservedCode2: 'b6d27ebe-c816-4b84-9c90-f89997ec1468'
+  ProduceID: 'fb624b8d-ee0e-4c82-892b-1a32e286f32f'
+  PropagateID: 'fb624b8d-ee0e-4c82-892b-1a32e286f32f'
+  ReservedCode1: '85c3ca33-ca58-4773-938a-69e1cba65e23'
+  ReservedCode2: '85c3ca33-ca58-4773-938a-69e1cba65e23'
 ---
 
 <h1 align="center">Komandare</h1>
@@ -254,7 +254,7 @@ kmod-setup list                  # list registered modules
 kmod-setup list -r               # compare with remote registry versions
 kmod-setup install <dir> [priority 00-99] [name] [version] [publisher]
 kmod-setup install <pkg.kmp>     # install from a local package
-kmod-setup install <name> -r     # download & install from the remote registry
+kmod-setup install -r <name>     # download & install from the remote registry
 kmod-setup sync                  # refresh the remote registry cache
 kmod-setup update [name]         # check / install remote updates
 kmod-setup mirror [url]          # show / set download mirror (default GitHub releases)

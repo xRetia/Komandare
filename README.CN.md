@@ -3,10 +3,10 @@ AIGC:
   ContentProducer: '001191110102MAD55U9H0F10002'
   ContentPropagator: '001191110102MAD55U9H0F10002'
   Label: '1'
-  ProduceID: '946595f0-f8e3-4886-ac18-4798917ecbfe'
-  PropagateID: '946595f0-f8e3-4886-ac18-4798917ecbfe'
-  ReservedCode1: '67872598-49d1-43e5-b650-27a3f8dea51b'
-  ReservedCode2: '67872598-49d1-43e5-b650-27a3f8dea51b'
+  ProduceID: '9c505dbd-138f-4c61-8381-3451b05cf6c7'
+  PropagateID: '9c505dbd-138f-4c61-8381-3451b05cf6c7'
+  ReservedCode1: '626cda56-2a4a-41f3-9b34-9fb82dc1a53c'
+  ReservedCode2: '626cda56-2a4a-41f3-9b34-9fb82dc1a53c'
 ---
 
 <h1 align="center">Komandare</h1>
@@ -254,7 +254,7 @@ kmod-setup list                  # 列出已注册模块
 kmod-setup list -r               # 对比远端 registry 版本
 kmod-setup install <目录> [优先级 00-99] [包名] [版本] [发行者]
 kmod-setup install <包.kmp>      # 从本地包安装
-kmod-setup install <name> -r     # 从远端 registry 下载安装
+kmod-setup install -r <name>       # 从远端 registry 下载安装
 kmod-setup sync                  # 刷新远端 registry 缓存
 kmod-setup update [name]         # 检查/安装远端更新
 kmod-setup mirror [url]          # 查看/设置下载镜像（默认 GitHub releases）
