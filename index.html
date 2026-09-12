@@ -259,6 +259,55 @@
     section { padding: 44px 20px 8px; }
     footer { padding: 28px 20px 44px; }
   }
+
+/* ---------- live demos: aishell + neofetch ---------- */
+  section { scroll-margin-top: 64px; }
+  .showcase {
+    display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 18px; align-items: stretch;
+  }
+  .showcase .term { min-width: 0; }
+  #aishellDemo, #neofetchDemo { cursor: pointer; }
+  .aish-demo .body {
+    min-height: 400px; padding: 22px 28px;
+    white-space: pre-wrap; overflow: hidden;
+    font-size: clamp(10.5px, 1.7vw, 14px); line-height: 1.62;
+  }
+  .neo-demo .body {
+    min-height: 400px; padding: 18px 20px;
+    white-space: pre; overflow: hidden;
+    font-size: clamp(8.5px, 1.2vw, 11.5px); line-height: 1.55;
+  }
+  .aish-line { min-height: 1.6em; }
+  .aish-dim { color: var(--muted); }
+  .aish-cur {
+    display: inline-block; width: .6em; height: 1.2em; margin-left: 2px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-radius: 2px; vertical-align: text-bottom;
+    animation: aish-blink 1.05s steps(1) infinite;
+  }
+  @keyframes aish-blink { 50% { opacity: 0; } }
+  .bar .aish-tag {
+    margin-left: auto; font-size: 11px; color: var(--muted);
+    letter-spacing: .4px; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .aish-tag i {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #f85149; box-shadow: 0 0 6px rgba(248,81,73,.85);
+  }
+  .aish-lead {
+    max-width: 760px; margin: 0 auto 30px; text-align: center;
+    font-size: 15px; color: var(--muted);
+  }
+  .demo-hint { margin-top: 16px; text-align: center; font-size: 12.5px; color: var(--muted); }
+  @media (max-width: 900px) {
+    .showcase { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .aish-demo .body, .neo-demo .body { min-height: 280px; }
+    .aish-demo .body { padding: 16px 14px; }
+    .neo-demo .body { padding: 14px 12px; }
+  }
 </style>
 </head>
 <body>
@@ -267,6 +316,7 @@
   <div class="inner">
     <div class="brand"><img src="Source/logo.png" alt="Komandare logo"><span>Komand<span style="color:var(--accent)">are</span></span></div>
     <a class="link" href="#features" data-zh="特性">Features</a>
+    <a class="link" href="#aishell" data-zh="AI Shell">AI Shell</a>
     <a class="link" href="#quickstart" data-zh="快速开始">Quick Start</a>
     <a class="link" href="#diy" data-zh="DIY 模块">DIY Modules</a>
     <a class="link" href="#tools" data-zh="内置工具">Built-in Tools</a>
@@ -314,36 +364,31 @@
       <p data-zh="&lt;code&gt;kRun code .&lt;/code&gt; —— 注入完整工具链后启动任意第三方程序。VSCode 等 IDE 直接看到整个 Komandare 环境。"><code>kRun code .</code> — injects the complete toolchain before launching any third-party program. VSCode and other IDEs see the whole Komandare environment.</p>
     </div>
     <div class="card feature">
+      <h3><span class="dot" style="background:var(--accent)"></span><span data-zh="AI Shell · 自然语言转命令">AI Shell · NL to Commands</span></h3>
+      <p data-zh="&lt;code&gt;aishell&lt;/code&gt; —— 用自然语言描述需求，自动生成 shell 命令，&lt;code&gt;RUN&lt;/code&gt; 确认后执行。支持中文与英文。"><code>aishell</code> — describe what you need in natural language and get a shell command, executed after a <code>RUN</code> confirmation. Works in Chinese and English.</p>
+    </div>
+    <div class="card feature">
       <h3><span class="dot" style="background:var(--accent-2)"></span><span data-zh="便携模块">Portable Modules</span></h3>
       <p data-zh="工具链以可移植模块组织（Module/），kmod-setup 一键安装卸载。整个目录树可随意移动，甚至跨盘符。">Toolchains are organized as portable modules (Module/), installed and removed by kmod-setup in one command. The whole tree moves freely — even across drives.</p>
     </div>
   </div>
 </section>
 
-<!-- terminal mock: real neofetch output -->
-<section>
-  <div class="term">
-    <div class="bar"><i></i><i></i><i></i><span>komandare —— kmd</span></div>
-    <div class="body"><span class="m">demo@MYPC</span> <span class="c">~</span> <span class="p">$</span> <span class="w">ver</span>
-<span class="fig">    __ __                                __
-   / //_/___  ____ ___  ____ _____  ____/ /___ _________
-  / ,&lt; / __ \/ __ `__ \/ __ `/ __ \/ __  / __ `/ ___/ _ \
- / /| / /_/ / / / / / / /_/ / / / / /_/ / /_/ / /  /  __/
-/_/ |_\\____/_/ /_/ /_/\__,_/_/ /_/\__,_/\__,_/_/   \___/</span>
-<span class="rb"><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span></span>
-
-<span class="lab" style="color:#3fb950">User           </span> : <span class="u">demo@MYPC</span>
-<span class="lab" style="color:#d29922">OS             </span> : <span class="u">Komandare</span>
-<span class="lab" style="color:#39c5cf">System Version </span> : <span class="g">4.0.2026.0910</span>
-<span class="lab" style="color:#d2a8ff">Kernel         </span> : <span class="u">CYGWIN 3.6.6</span>
-<span class="lab" style="color:#2c95ff">Shell          </span> : <span class="y">Komandare Shell</span>
-<span class="lab" style="color:#f85149">WCmdBox        </span> : <span class="c">20.08.1</span>
-<span class="lab" style="color:#e6edf3">Unique Libs    </span> : <span class="mg">/kbin [apt-cyg, kmod-setup, neofetch, sudo, wcmdbox, ...]</span>
-<span class="lab" style="color:#39c5cf">Project        </span> : <span class="b" style="font-weight:700">https://github.com/xRetia/Komandare</span>
-
-<span class="rb"><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span><span>-</span></span>
-<span class="rd" style="font-weight:700">Welcome to Komandare!</span></div>
+<!-- AI Shell live demo -->
+<section id="aishell">
+  <h2 class="sec" data-zh="划时代的 AI Shell —— 自然语言直接变成命令">AI Shell — Natural Language, Straight to Commands</h2>
+  <p class="aish-lead" data-zh="&lt;code&gt;aishell&lt;/code&gt; 把一句中文或英文直接变成一条可执行的 shell 命令。你只需描述需求，&lt;code&gt;RUN&lt;/code&gt; 确认，立即执行。端点和模型在 &lt;code&gt;Config/AIShell.ini&lt;/code&gt; 配置。"><code>aishell</code> turns a sentence of Chinese or English into one runnable shell command. Describe it, confirm with <code>RUN</code>, and it executes. Endpoint &amp; model are configured in <code>Config/AIShell.ini</code>.</p>
+  <div class="showcase">
+    <div class="term aish-demo" id="aishellDemo" role="button" tabindex="0" aria-label="AI Shell demo (click to replay)">
+      <div class="bar"><i></i><i></i><i></i><span>komandare —— aishell</span><span class="aish-tag"><i></i><span data-zh="录制回放">REC</span></span></div>
+      <div class="body aish-body" id="aishellOut">&nbsp;</div>
+    </div>
+    <div class="term neo-demo" id="neofetchDemo" role="button" tabindex="0" aria-label="ver / neofetch demo (click to replay)">
+      <div class="bar"><i></i><i></i><i></i><span>komandare —— ver</span><span class="aish-tag"><i></i><span data-zh="录制回放">REC</span></span></div>
+      <div class="body neo-body" id="neofetchOut">&nbsp;</div>
+    </div>
   </div>
+  <p class="demo-hint" data-zh="左：AI Shell 实况回放；右：ver / neofetch 输出动画。点击任意终端重播。">Left: aishell live replay. Right: ver / neofetch animation. Click either terminal to replay.</p>
 </section>
 
 <!-- quickstart -->
@@ -433,7 +478,7 @@
   <h2 class="sec" data-zh="下载">Download</h2>
   <div class="dl-grid">
     <div class="card dl-card">
-      <div class="ver">stable · v4.0.2026.0910</div>
+      <div class="ver">stable · v4.2.2026.0911</div>
       <h3 data-zh="Windows 安装器">Windows Installer</h3>
       <p data-zh="NSIS 安装器，内置完整基础运行时（Unixlike + Config + Binary + 启动器），模块按需安装。">NSIS installer bundling the full base runtime (Unixlike + Config + Binary + launchers); modules are installed on demand.</p>
       <div class="btn-row">
@@ -464,12 +509,15 @@
         <tr><th data-zh="命令">Command</th><th data-zh="作用">What it does</th></tr>
       </thead>
       <tbody>
+        <tr><td>aishell</td><td data-zh="AI 自然语言转 shell 命令（OpenAI 兼容 API，RUN 确认后执行）">AI natural-language → shell command translator (OpenAI-compatible API, RUN-confirmed execution)</td></tr>
         <tr><td>apt-cyg</td><td data-zh="Cygwin 包管理器（别名 apt / apt-get / yum / apk）">Cygwin package manager (aliases: apt, apt-get, yum, apk)</td></tr>
-        <tr><td>kmod-setup</td><td data-zh="模块系统包管理器（install / export / update / mirror）">Module system package manager (install / export / update / mirror)</td></tr>
+        <tr><td>kmod-setup</td><td data-zh="模块系统包管理器 v4.3.0（install / export / update / mirror，v2 registry，依赖与钩子支持）">Module system package manager v4.3.0 (install / export / update / mirror, v2 registry, deps &amp; hooks)</td></tr>
         <tr><td>kmd-welcome</td><td data-zh="首次运行设置向导（全屏 TUI）">First-run setup wizard (full-screen TUI)</td></tr>
         <tr><td>ver / version</td><td data-zh="neofetch + 发行版版本（-s 仅输出版本）">neofetch + distro version (-s prints just the version)</td></tr>
         <tr><td>neofetch</td><td data-zh="系统信息展示">System info display</td></tr>
         <tr><td>sudo / su</td><td data-zh="Windows UAC 提权开新 root 窗口（root 无密码）；unroot 恢复普通用户映射">Trigger a Windows UAC elevation that opens a new root kmd window; unroot restores the normal-user mapping</td></tr>
+        <tr><td>service</td><td data-zh="服务管理器分发器 —— 解析 Config/Service/&lt;name&gt;.bat 并执行动作">Service manager dispatcher — resolves Config/Service/&lt;name&gt;.bat and runs actions</td></tr>
+        <tr><td>vihost</td><td data-zh="以 root 权限用 nano 编辑 /etc/hosts（需 sudo）">Edit /etc/hosts in nano as root (requires sudo)</td></tr>
         <tr><td>wcmdbox / mobabox</td><td data-zh="Windows 命令盒 —— 提供 ifconfig / hwinfo 等网络与硬件信息">Windows command box — powers ifconfig / hwinfo network &amp; hardware info</td></tr>
         <tr><td>ps / top / killall</td><td data-zh="进程观察（Windows 感知）">Process observation (Windows-aware)</td></tr>
         <tr><td>mkrootfs</td><td data-zh="重建 kmod / kconf / tmp 文本符号链接（幂等）">Rebuild the kmod / kconf / tmp text-symlinks (idempotent)</td></tr>
@@ -523,7 +571,6 @@
         <tr><td>cygwin-setup</td><td data-zh="官方 Cygwin setup-x86_64.exe（完整包管理）">Official Cygwin setup-x86_64.exe (full package manager)</td></tr>
         <tr><td>composer / phpunit</td><td data-zh="PHP 依赖管理 / 测试运行器（.phar 包装）">PHP dependency manager / PHPUnit test runner (.phar wrappers)</td></tr>
         <tr><td>binwalk / jefferson</td><td data-zh="固件提取与文件系统分析（Python 工具前端）">Firmware extraction &amp; file-system analysis (front-ends for the Python tools in Module/)</td></tr>
-        <tr><td>service</td><td data-zh="服务管理分发器（docker start/stop/reset ……）">The service manager dispatcher (docker start/stop/reset, ...)</td></tr>
         <tr><td>desktopini</td><td data-zh="交互式设置文件夹显示名/图标（desktop.ini）">Interactively set a folder's display name / icon via desktop.ini</td></tr>
         <tr><td>pptp-dial</td><td data-zh="拨号 / 断开 PPTP VPN（dial &lt;addr&gt; &lt;user&gt; &lt;pass&gt;）">Dial / disconnect a PPTP VPN (dial &lt;addr&gt; &lt;user&gt; &lt;pass&gt;)</td></tr>
         <tr><td>MoveLater</td><td data-zh="把文件删除推迟到下次重启">Defer a file deletion to the next reboot</td></tr>
@@ -539,6 +586,7 @@
         <tr><th data-zh="模块">Module</th><th data-zh="内容">Contents</th></tr>
       </thead>
       <tbody>
+        <tr><td>aishell</td><td data-zh="AI 自然语言转 shell 命令翻译器">AI natural-language → shell command translator</td></tr>
         <tr><td>python3x</td><td data-zh="Python 3.12 —— pip 缓存、Playwright 浏览器、user-site 全收口在模块内">Python 3.12 — pip cache, Playwright browsers, user-site all inside the module</td></tr>
         <tr><td>nodejs</td><td data-zh="Node.js + npm / pnpm / npx（缓存收口在模块内）">Node.js + npm / pnpm / npx (caches contained)</td></tr>
         <tr><td>golang</td><td data-zh="Go 工具链 —— GOMODCACHE 等全在模块内">Go toolchain — GOMODCACHE &amp; co. inside the module</td></tr>
@@ -555,6 +603,7 @@
         <tr><td>squashfs-tools</td><td data-zh="squashfs 只读文件系统打包/解包">squashfs image pack/unpack</td></tr>
         <tr><td>windows-driver-sign</td><td data-zh="Windows 驱动签名工具链">Windows driver signing toolchain</td></tr>
         <tr><td>vbox-helper</td><td data-zh="VirtualBox 辅助（service docker 后端）">VirtualBox helper (backend for service docker)</td></tr>
+        <tr><td>vbox</td><td data-zh="VirtualBox 运行体">VirtualBox runtime</td></tr>
         <tr><td>z-cache-clean</td><td data-zh="启动时按 CacheClean.ini 自动维护各模块缓存">Auto-maintains module caches at boot per CacheClean.ini</td></tr>
       </tbody>
     </table>
@@ -606,6 +655,256 @@
   var btn = document.getElementById('langBtn');
   if (btn) btn.addEventListener('click', function () { apply(lang === 'zh' ? 'en' : 'zh'); });
   apply(lang);
+})();
+</script>
+
+<script>
+(function () {
+  /* ---------- live demos: aishell + neofetch ---------- */
+  var speed = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ? 0.15 : 1;
+  var spinFrames = ['\u280b','\u2819','\u2839','\u2838','\u283c','\u2834','\u2826','\u2827','\u2807','\u280f'];
+
+  function makeTerm(outId) {
+    var out = document.getElementById(outId);
+    if (!out) return null;
+    var cur = null;
+    function refresh() {
+      out.textContent = '';
+      cur = document.createElement('span');
+      cur.className = 'aish-cur';
+      out.appendChild(cur);
+    }
+    refresh();
+    function esc(c) {
+      if (c === '<') return '&lt;';
+      if (c === '>') return '&gt;';
+      if (c === '&') return '&amp;';
+      return c;
+    }
+    function feed(html) { cur.insertAdjacentHTML('beforebegin', html); }
+    function line(cls) {
+      var d = document.createElement('div');
+      d.className = 'aish-line' + (cls ? ' ' + cls : '');
+      out.appendChild(d);
+      if (cur.parentNode) cur.parentNode.removeChild(cur);
+      d.appendChild(cur);
+      return d;
+    }
+    function pause(ms) { return new Promise(function (r) { setTimeout(r, ms * speed); }); }
+    function typeTokens(text, base, jitter, cls) {
+      var chars = [];
+      for (var k = 0; k < text.length; k++) chars.push([text[k], cls || '']);
+      var idx = 0, acc = '';
+      return new Promise(function (resolve) {
+        (function step() {
+          if (idx >= chars.length) { if (acc) feed(acc); resolve(); return; }
+          var p = chars[idx++];
+          acc += (p[1] ? '<span class="' + p[1] + '">' + esc(p[0]) + '</span>' : esc(p[0]));
+          if (acc.length >= 8 || idx >= chars.length) { feed(acc); acc = ''; }
+          setTimeout(step, (base + Math.random() * jitter) * speed);
+        })();
+      });
+    }
+    function done() {
+      if (cur.parentNode) cur.parentNode.removeChild(cur);
+      cur = null;
+    }
+    return {
+      refresh: refresh, feed: feed, line: line, pause: pause,
+      typeTokens: typeTokens, done: done
+    };
+  }
+
+  function spinner(T, ms) {
+    var ln = T.line('aish-dim');
+    var sp = document.createElement('span');
+    sp.textContent = ' \u2026';
+    ln.appendChild(sp);
+    var i = 0;
+    var t = setInterval(function () {
+      i = (i + 1) % spinFrames.length;
+      sp.textContent = spinFrames[i] + ' \u2026';
+    }, 80);
+    return T.pause(ms).then(function () {
+      clearInterval(t);
+      if (sp.parentNode) sp.parentNode.removeChild(sp);
+    });
+  }
+
+  function rainbow(T, count) {
+    var ln = T.line();
+    var sp = document.createElement('span');
+    sp.className = 'rb';
+    ln.insertBefore(sp, ln.lastChild);
+    var i = 0;
+    return new Promise(function (resolve) {
+      (function step() {
+        if (i >= count) { resolve(); return; }
+        var s = document.createElement('span');
+        s.textContent = '-';
+        sp.appendChild(s);
+        i++;
+        setTimeout(step, 2.5 * speed);
+      })();
+    });
+  }
+
+  /* ================= aishell replay ================= */
+  var A = makeTerm('aishellOut');
+  if (A) {
+    A.busy = false;
+    function playAishell() {
+      if (A.busy) return;
+      A.busy = true;
+      A.refresh();
+      var zhMode = document.documentElement.lang === 'zh-CN';
+      var request = zhMode ? '\u67e5\u627e\u6700\u8fd1 7 \u5929\u5185\u4fee\u6539\u8fc7\u7684\u65e5\u5fd7\u6587\u4ef6\uff0c\u6309\u5927\u5c0f\u5217\u51fa' : 'find log files modified in the last 7 days, sorted by size';
+      A.line('aish-dim');
+      A.feed('Komandare AI Shell (bash)');
+      A.line('aish-dim');
+      A.feed('Type a request, or enter exit to leave. Exact confirmation required: RUN');
+      A.line();
+
+      A.pause(520)
+        .then(function () {
+          var ln = A.line();
+          A.feed('<span class="m">demo@MYPC</span>: <span class="b">~</span> <span class="mg">AI&gt;</span> ');
+          return A.typeTokens(request, zhMode ? 46 : 20, 60);
+        })
+        .then(function () { return A.pause(300); })
+        .then(function () { return spinner(A, 1400); })
+        .then(function () { return A.pause(180); })
+        .then(function () {
+          var ln = A.line();
+          A.feed('<span class="y">AI Prompt&gt;</span> ');
+          return A.typeTokens("find /var/log -type f -mtime -7 -printf '%10s %f\\n' | sort -rn | head -6", 15, 22, 'c');
+        })
+        .then(function () { return A.pause(360); })
+        .then(function () {
+          A.line('aish-dim');
+          A.feed('Type RUN to execute exactly, or anything else to cancel:');
+          var ln = A.line();
+          return A.typeTokens('RUN', 75, 60, 'g');
+        })
+        .then(function () { return A.pause(260); })
+        .then(function () { A.line('m'); A.feed('10485760 syslog.log'); return A.pause(210); })
+        .then(function () { A.line('m'); A.feed(' 5242880 dpkg.log'); return A.pause(210); })
+        .then(function () { A.line('m'); A.feed('  104858 apt.log'); return A.pause(240); })
+        .then(function () { A.line('aish-dim'); A.feed('[exit 0]'); return A.pause(760); })
+        .then(function () { A.done(); A.busy = false; })
+        .catch(function () { A.busy = false; });
+    }
+    var aRoot = document.getElementById('aishellDemo');
+    if (aRoot) {
+      aRoot.addEventListener('click', function () { if (!A.busy) playAishell(); });
+      aRoot.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!A.busy) playAishell(); }
+      });
+    }
+  }
+
+  /* ================= neofetch replay ================= */
+  var N = makeTerm('neofetchOut');
+  if (N) {
+    N.busy = false;
+    var NEO_LOGO = [
+      '    __ __                                __',
+      '   / //_/___  ____ ___  ____ _____  ____/ /___ _________',
+      '  / ,< / __ \\/ __ `__ \\/ __ `/ __ \\/ __  / __ `/ ___/ _ \\',
+      ' / /| / /_/ / / / / / / /_/ / / / / /_/ / /_/ / /  /  __/',
+      '/_/ |_\\____/_/ /_/ /_/\\__,_/_/ /_/\\__,_/\\__,_/_/   \\___/'
+    ];
+    var NEO_ROWS = [
+      ['User', '#3fb950', '<span class="u">demo@MYPC</span>'],
+      ['OS', '#d29922', '<span class="u">Komandare</span>'],
+      ['System Version', '#39c5cf', '<span class="g">4.2.2026.0911</span>'],
+      ['Kernel', '#d2a8ff', '<span class="u">CYGWIN 3.6.6</span>'],
+      ['Shell', '#2c95ff', '<span class="y">Komandare Shell</span>'],
+      ['WCmdBox', '#f85149', '<span class="c">20.08.1</span>'],
+      ['Unique Libs', '#e6edf3', '<span class="mg">/kbin [aishell, apt-cyg, kmod-setup, ...]</span>'],
+      ['Project', '#39c5cf', '<span class="b" style="font-weight:700">https://github.com/xRetia/Komandare</span>']
+    ];
+    function padLabel(s) { while (s.length < 16) s += ' '; return s; }
+
+    function playNeofetch() {
+      if (N.busy) return;
+      N.busy = true;
+      N.refresh();
+
+      N.pause(350)
+        .then(function () {
+          var ln = N.line();
+          N.feed('<span class="m">demo@MYPC</span> <span class="c">~</span> <span class="p">$</span> ');
+          return N.typeTokens('ver', 75, 60);
+        })
+        .then(function () { return N.pause(240); })
+        .then(function () {
+          var chain = Promise.resolve();
+          NEO_LOGO.forEach(function (txt) {
+            chain = chain.then(function () { N.line('fig'); N.feed(txt); return N.pause(70); });
+          });
+          return chain;
+        })
+        .then(function () { N.line(); return N.pause(60); })
+        .then(function () { return rainbow(N, 57); })
+        .then(function () { return N.pause(90); })
+        .then(function () {
+          var chain = Promise.resolve();
+          NEO_ROWS.forEach(function (row) {
+            chain = chain.then(function () {
+              var ln = N.line();
+              N.feed('<span class="lab" style="color:' + row[1] + '">' + padLabel(row[0]) + '</span> : ' + row[2]);
+              return N.pause(95);
+            });
+          });
+          return chain;
+        })
+        .then(function () { N.line(); return N.pause(80); })
+        .then(function () { return rainbow(N, 57); })
+        .then(function () { return N.pause(140); })
+        .then(function () {
+          var ln = N.line();
+          N.feed('<span class="rd" style="font-weight:700">Welcome to Komandare!</span>');
+          return N.pause(650);
+        })
+        .then(function () { N.done(); N.busy = false; })
+        .catch(function () { N.busy = false; });
+    }
+    var nRoot = document.getElementById('neofetchDemo');
+    if (nRoot) {
+      nRoot.addEventListener('click', function () { if (!N.busy) playNeofetch(); });
+      nRoot.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!N.busy) playNeofetch(); }
+      });
+    }
+  }
+
+  /* ================= auto-start on scroll ================= */
+  var box = document.querySelector('.showcase');
+  var started = false;
+  function startAll() {
+    if (started) return;
+    started = true;
+    if (A) playAishell();
+    if (N) playNeofetch();
+  }
+  if (box) {
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting && !started) { startAll(); io.disconnect(); } });
+      }, { threshold: 0.25 });
+      io.observe(box);
+    } else {
+      function inView() {
+        var r = box.getBoundingClientRect();
+        return r.top < (window.innerHeight || document.documentElement.clientHeight) * 0.85 && r.bottom > 0;
+      }
+      var onScroll = function () { if (inView() && !started) { startAll(); window.removeEventListener('scroll', onScroll); } };
+      window.addEventListener('scroll', onScroll);
+      window.addEventListener('resize', onScroll);
+      onScroll();
+    }
+  }
 })();
 </script>
 

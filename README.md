@@ -54,16 +54,16 @@ Followed by `ver` — neofetch plus the distro version:
 
 User             : demo@MYPC
 OS               : Komandare
-System Version   : 4.0.2026.0910
+System Version   : 4.2.2026.0911
 Kernel           : CYGWIN 3.6.6
 Shell            : Komandare Shell
 WCmdBox          : 20.08.1
-Unique Libs      : /kbin [adb, apt-cyg, attrib, binwalk, dir, fastboot, jefferson, killall, kmd-welcome, kmod-setup, mklink, mkrootfs, neofetch, phptest, poweroff, ps, reboot, reset, runas_root, runas_user, su, sudo, top, unroot, ver, version, wcmdbox]
+Unique Libs      : /kbin [aishell, adb, apt-cyg, attrib, binwalk, dir, fastboot, jefferson, killall, kmd-welcome, kmod-setup, mklink, mkrootfs, neofetch, phptest, poweroff, ps, reboot, reset, runas_root, runas_user, service, su, sudo, top, unroot, ver, version, vihost, wcmdbox]
 Project          : https://github.com/xRetia/Komandare
 
 ------------------------------------------------------------
 Welcome to Komandare!
-Komandare Version: 4.0.2026.0910
+Komandare Version: 4.2.2026.0911
 Copyright (c)2026 xRetia Labs
 ```
 
@@ -81,6 +81,8 @@ Copyright (c)2026 xRetia Labs
 kRun code .
 ```
 
+Run `kRun` with no arguments and it pops a Windows-style Run dialog (bottom-left, with the Komandare icon) — type any command there and it launches with the same full environment. The binary is built from `Source/kRun.c` (C, zero-CRT native PE) via `Source/build_krun.ps1`.
+
 **kCmd / kBash — kmd environment in any other terminal.** Already sitting in PowerShell, Windows Terminal, ConEmu or CMD? `kCmd` and `kBash` hand you a fully booted Komandare shell right there, no new window:
 
 ```bat
@@ -89,6 +91,12 @@ kBash           :: enter bash with the kmd environment
 ```
 
 **kmd — the recommended launcher.** Double-click `kmd.exe` and get a proper Komandare terminal: it prefers Windows Terminal (≥ 1.22), falls back to the bundled ConEmu build, and — as a nice touch — injects a WT *profile fragment* so that dragging files into the terminal converts paths to `/mnt/c/...` automatically, without touching your WT settings.json.
+
+**AI Shell — natural-language to shell commands.** `aishell` translates plain-English (or Chinese) descriptions into shell commands via an OpenAI-compatible API. Describe what you want and get a suggested command with an optional `RUN` confirmation before execution. Configure the API endpoint and model in `Config/AIShell.ini`:
+
+```bash
+aishell "find all log files modified in the last 7 days and sort by size"
+```
 
 ---
 
@@ -183,11 +191,9 @@ Everything in `Binary/` is green and put on PATH automatically at boot. Besides 
 | `RawCap.exe` | capture raw traffic on a local interface to a pcap file |
 | `streams.exe` / `streams64.exe` | strip NTFS Alternate Data Streams (Mark-of-the-Web) |
 | `cygwin-setup.exe` | the official Cygwin `setup-x86_64.exe` (full package manager) |
-| `NSIS/` | Nullsoft Scriptable Install System — `makensis` installer builder |
 | `composer.bat` (+ `.phar`) | PHP dependency manager (`composer` on PATH) |
 | `phpunit.bat` (+ `.phar`) | PHPUnit test runner |
 | `binwalk.bat` / `jefferson.bat` | firmware extraction & file-system analysis (front-ends for the Python tools in `Module/`) |
-| `service.bat` | the service manager dispatcher (see [Services](#services)) |
 | `desktopini.bat` | interactively set a folder's display name / icon via `desktop.ini` |
 | `pptp-dial.bat` (+ `pptp.pbk`) | dial / disconnect a PPTP VPN (`dial <addr> <user> <pass>` / `disconnect`) |
 | `MoveLater.exe` | defer a file deletion to the next reboot |
@@ -217,6 +223,7 @@ Each `Module/<name>/` is one self-contained toolchain package, registered by `Co
 | Module | What it provides |
 | --- | --- |
 | `7zip` | 7-Zip archiving (`7z`, `7za`) |
+| `aishell` | AI-powered natural-language → shell command translator |
 | `adb` / `fastboot` | Android device bridge & bootloader tools |
 | `dig` | DNS lookup utility |
 | `git` | Git (prefers Git for Windows, falls back to bundled Cygwin git) |
@@ -238,6 +245,7 @@ Each `Module/<name>/` is one self-contained toolchain package, registered by `Co
 | `squashfs-tools` | `mksquashfs` / `unsquashfs` filesystem tools |
 | `unzip` | ZIP extraction |
 | `vbox-helper` | VirtualBox headless helper (Docker VM support) |
+| `vbox` | VirtualBox runtime |
 | `windows-driver-sign` | sign Windows drivers (WHQL / self-signed) |
 | `z-cache-clean` | cache self-maintenance at boot (see above) |
 
@@ -245,7 +253,7 @@ Each `Module/<name>/` is one self-contained toolchain package, registered by `Co
 
 ## kmod-setup — module package manager
 
-Modules are managed by `kmod-setup` (a built-in `/kbin` command):
+Modules are managed by `kmod-setup` (a built-in `/kbin` command, **v4.3.0**):
 
 ```bash
 kmod-setup list                  # list registered modules
@@ -264,7 +272,19 @@ kmod-setup remove <name>         # unregister a module (keeps Module/<dir>)
 - `.kmp` packages are plain zips (`kmp.ini` + `loader.cmd` + `module/`) — hand-craftable, sha256-verified when pulled remotely;
 - `mirror` switches the download base (default: `github.com/xRetia/komandare-mod-pkgs` latest release) — handy for intranet/offline environments.
 
-Bundled modules today: 7-Zip, adb, dig, git (prefers Git for Windows, falls back to the bundled Cygwin git), golang, gradle, gsudo, iperf3, lessc, nodejs, ntr, php, pstop, python3x, qemu, ruby4, selfsign-ssl, socat, squashfs-tools, unzip, vbox-helper, windows-driver-sign, z-cache-clean.
+**v4.3.0 compatibility highlights:**
+- **registry.kp v2 schema** — `[global] kmpbase=` / `scriptbase=` base-URL overrides; relative paths resolve against the mirror, absolute URLs pass through.
+- **Multi-mirror support** — every `mirror=` line in `Config/Registry.ini` is tried in order.
+- **Root-layout packages** — `root=yes` in `kmp.ini` installs directly into `KMD_ROOT` with zero Cygwin forks (avoids `dll data read copy failed` under memory pressure).
+- **`-latest` conflict detection** — before installing a `-latest` package, prompts to remove older same-tool versions.
+- **Install hooks** — `.sh` / `.ps1` / `.cmd` hooks dispatched by extension; failed hooks wipe the payload and abort.
+- **Dependency support** — `depends=` in kmp.ini / registry, cycle detection, isolated subshell installs.
+- **Offline-tolerant registry refresh** — TTL-based cache (default 600 s), falls back to stale cache when offline.
+- **GitHub release-asset flattening** — retries bare basename if `file=kmp/x.kmp` returns 404.
+- **Busybox unzip fallback** — core install can still unpack `.kmp` files without full toolchain.
+- **`.KmdCore` protection** — `remove` refuses to delete system modules.
+
+Bundled modules today: 7-Zip, aishell, adb, dig, git (prefers Git for Windows, falls back to the bundled Cygwin git), golang, gradle, gsudo, iperf3, lessc, nodejs, ntr, php, pstop, python3x, qemu, ruby4, selfsign-ssl, socat, squashfs-tools, unzip, vbox, vbox-helper, windows-driver-sign, z-cache-clean.
 
 ---
 
@@ -288,6 +308,8 @@ Bundled modules today: 7-Zip, adb, dig, git (prefers Git for Windows, falls back
 | `binwalk` / `jefferson` | firmware analysis |
 | `phptest` | quick PHP scratchpad: opens a temp `.php` in `nano`, then runs it |
 | `wcmdbox` / `mobabox` | Komandare tool boxes (run Windows tools from Unix paths) |
+| `service` | service manager dispatcher — resolves `Config/Service/<name>.bat` and executes actions |
+| `vihost` | opens `/etc/hosts` in `nano` with root privileges (requires `sudo`) |
 | `poweroff` / `reboot` / `reset` | quick system actions |
 | `attrib` / `dir` / `mklink` | Windows filesystem commands bridged through wcmdbox |
 
@@ -320,7 +342,7 @@ doskey macros from `SystemAliases.ini` (system) + `UserAliases.ini` (yours). Hig
 
 ## Services
 
-`service` (in `Binary/`) is a tiny service manager:
+`service` (a built-in `/kbin` command) is a tiny service manager that resolves `Config/Service/<name>.bat` and executes actions:
 
 ```bat
 service docker start       :: start the Docker VM (VirtualBox headless)

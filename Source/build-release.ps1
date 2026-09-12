@@ -2,49 +2,116 @@
 # Produces .release\ output:
 #   Komandare-Setup-<ver>.exe   NSIS installer (base runtime embedded)
 #   kmp\<module>.kmp            one per Module/* (via kmod-setup export)
-#   registry.kp                 module index: version/size/sha256/file per package
+#   registry.kp                 module index: version/size/sha256/file/description
 #
 # Installer embeds the full base file tree (Unixlike + Config + Binary + bats).
 # Modules are NOT embedded - they are fetched post-install from the release
 # mirror via kmod-setup (mirror default = GitHub releases/latest/download).
 #
-# Usage: powershell -ExecutionPolicy Bypass -File Source\build-release.ps1
-#        [-Modules "python3x","nodejs"]  (default: ALL registered modules)
-#        [-SkipNSIS]                    (skip the installer step, module packs only)
-#        [-SkipKmp]                    (skip module packing + registry, base+NSIS only)
-
-param(
-    [object]$Modules = $null,
-    [switch]$SkipNSIS,
-    [switch]$SkipKmp
-)
+# Usage: powershell -ExecutionPolicy Bypass -File Source\build-release.ps1 [options]
+# cmd-style switches (/switch=value, /flag, /?, /help; "-" may replace "/"):
+#   /skipnsis        skip the NSIS installer step (module packs + registry only)
+#   /skipkmp         skip module packing + registry.kp (base + NSIS only)
+#   /modules=a,b     pack only these module names (default: ALL registered)
+#   /desc=path       module annotation file (default: Source\registry-desc.ini)
+#   /out=dir         output directory (default: <root>\.release)
+#   /?, /h, /help    show this help and exit
+#
+# module annotations: registry.kp sections get a description= line from the
+# annotation file (one "base=text" per line); it is the sole authoritative
+# source for sync - kmod-setup reads registry.kp registry-first.
 
 $ErrorActionPreference = "Stop"
-# normalize Modules into a clean string array (empty = all)
-if ($null -eq $Modules) {
-    $Modules = @()
-} elseif ($Modules -is [array]) {
-    $Modules = @($Modules | ForEach-Object { "$_" })
-} else {
-    $s = "$Modules"
-    if ($s.Trim() -eq "") { $Modules = @() }
-    else { $Modules = @(($s -split '[,;]') | ForEach-Object { $_.Trim() } | Where-Object { $_ }) }
-}
 
+# ---- cmd-style argument parsing: /switch=value, /flag, /?, /help ----
+$usage = @'
+build-release.ps1 - Komandare release packer (NSIS installer)
+
+Usage: powershell -ExecutionPolicy Bypass -File Source\build-release.ps1 [options]
+
+Options (cmd-style switches; "-" may replace "/"):
+  /?, /h, /help     show this help and exit
+  /skipnsis         skip the NSIS installer step (module packs + registry only)
+  /skipkmp          skip module packing + registry.kp (base + NSIS only)
+  /modules=a,b      pack only these modules (comma separated; default: all)
+  /desc=path        module annotation/description file (default: Source\registry-desc.ini)
+  /out=dir          output directory (default: <root>\.release)
+
+Examples:
+  build-release.ps1
+  build-release.ps1 /skipnsis
+  build-release.ps1 /skipnsis /modules=7zip,php
+  build-release.ps1 /skipkmp /out=C:\rel\test
+'@
+
+$opt = @{
+    SkipNSIS = $false
+    SkipKmp  = $false
+    Modules  = @()
+    Desc     = $null
+    OutDir   = $null
+    Help     = $false
+}
+$pending = $null   # switch name waiting for its value from the next token
+foreach ($raw in $args) {
+    $a = "$raw"
+    if ($pending -ne $null) {
+        if ($pending -eq 'Modules') { $opt.Modules = @(($a -split '[,;]') | ForEach-Object { $_.Trim() } | Where-Object { $_ }) }
+        elseif ($pending -eq 'Desc')  { $opt.Desc  = $a }
+        elseif ($pending -eq 'OutDir'){ $opt.OutDir = $a }
+        $pending = $null
+        continue
+    }
+    $sw = ""; $val = $null
+    if ($a -match '^[/-]([^=]+?)(?:=(.*))?$') {
+        $sw  = $Matches[1].Trim().ToLowerInvariant()
+        if ($Matches.Count -gt 2 -and $null -ne $Matches[2] -and $Matches[2].Length -gt 0) { $val = $Matches[2] }
+    } else {
+        throw "unrecognized argument: $a"
+    }
+    switch ($sw) {
+        '?'       { $opt.Help = $true }
+        'h'       { $opt.Help = $true }
+        'help'    { $opt.Help = $true }
+        'skipnsis'{ $opt.SkipNSIS = $true }
+        'skipkmp' { $opt.SkipKmp = $true }
+        'modules' { if ($null -eq $val) { $pending = 'Modules' } else { $opt.Modules = @(($val -split '[,;]') | ForEach-Object { $_.Trim() } | Where-Object { $_ }) } }
+        'desc'    { if ($null -eq $val) { $pending = 'Desc' }    else { $opt.Desc = $val } }
+        'out'     { if ($null -eq $val) { $pending = 'OutDir' }  else { $opt.OutDir = $val } }
+        default   { Write-Host $usage; throw "unrecognized switch: /$sw" }
+    }
+}
+if ($null -ne $pending) { throw "missing value for switch /$pending" }
+if ($opt.Help) { Write-Host $usage; exit 0 }
+if ($opt.SkipNSIS -and $opt.SkipKmp) {
+    Write-Host "warning: /skipnsis + /skipkmp = base payload only" -ForegroundColor Yellow
+}
+$SkipNSIS = $opt.SkipNSIS
+$SkipKmp  = $opt.SkipKmp
+$Modules  = $opt.Modules
+
+# the script lives in <root>\Source (or <root>\.github\Source for the cloned
+# dev repo); walk up until we hit the real Komandare tree (has Config\Kernel.ini)
 $root  = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
-$rel   = Join-Path $root ".release"
+while (-not (Test-Path (Join-Path $root "Config\Kernel.ini")) -and (Split-Path -Leaf $root) -ne (Split-Path -Leaf (Split-Path $root -Parent))) {
+    $root = Split-Path -Parent $root
+}
+if (-not (Test-Path (Join-Path $root "Config\Kernel.ini"))) { throw "cannot locate Komandare root (no Config\Kernel.ini under $root)" }
+$rel   = if ($opt.OutDir) { $opt.OutDir } else { Join-Path $root ".release" }
 $stage = Join-Path $rel "stage"
 $7z    = Join-Path $root "Module\7zip\7z.exe"
 $bash  = Join-Path $root "Unixlike\bin\bash.exe"
-$nsis  = Join-Path $root "Binary\NSIS\makensis.exe"
+$nsis  = Join-Path $root ".github\Source\NSIS\makensis.exe"
 
 if (-not (Test-Path $7z))   { throw "7z.exe not found: $7z" }
 if (-not (Test-Path $bash)) { throw "bash.exe not found: $bash" }
-if (-not $SkipNSIS -and -not (Test-Path $nsis)) { throw "makensis.exe not found: $nsis (install NSIS into Binary\NSIS)" }
+if (-not $SkipNSIS -and -not (Test-Path $nsis)) { throw "makensis.exe not found: $nsis (NSIS toolchain lives in .github\Source\NSIS)" }
 
 # ---------------------------------------------------------------- clean stage
 if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
-New-Item -ItemType Directory -Force -Path "$rel\kmp" | Out-Null
+$kmpDir = Join-Path $rel "kmp"
+if (Test-Path $kmpDir) { Remove-Item $kmpDir -Recurse -Force }
+New-Item -ItemType Directory -Force -Path $kmpDir | Out-Null
 New-Item -ItemType Directory -Force -Path "$stage\base" | Out-Null
 
 Write-Host "== Komandare release build (NSIS) ==" -ForegroundColor Cyan
@@ -68,26 +135,29 @@ $posixOut  = ($payload.ToLower() -replace '\\','/' -replace '^([a-z]):', '/mnt/$
 # CYGWIN=winsymlinks:sys on BOTH pack and extract: without it Cygwin recreates
 # symlinks as reparse points on extract (needs no admin here, but produces
 # non-plain files NSIS then mishandles). With :sys they stay text files.
-& $bash -lc "cd '$posixRoot' && CYGWIN=winsymlinks:sys tar -cf '$posixTar' -C Unixlike . 2>/dev/null" | Out-Null
+& $bash -lc "export PATH=/bin:/usr/bin; cd '$posixRoot' && CYGWIN=winsymlinks:sys tar -cf '$posixTar' -C Unixlike . 2>/dev/null" | Out-Null
 if (-not (Test-Path (Join-Path $payload "_u.tar"))) { throw "tar pack failed: no _u.tar" }
 # extract: tar restores the text symlinks as-is (plain files, System attr).
 New-Item -ItemType Directory -Force -Path (Join-Path $payload "Unixlike") | Out-Null
-& $bash -lc "cd '$posixOut/Unixlike' && CYGWIN=winsymlinks:sys tar -xf '$posixTar'" 2>&1 | Out-Null
+& $bash -lc "export PATH=/bin:/usr/bin; cd '$posixOut/Unixlike' && CYGWIN=winsymlinks:sys tar -xf '$posixTar'" 2>&1 | Out-Null
 Remove-Item (Join-Path $payload "_u.tar") -Force
 
 # add Config / Binary / root bats / exe
-#   - Binary: exclude the build toolchain itself (NSIS) - it's a dev-only
-#     dependency, shipping it bloats the installer by ~7 MB and is pointless
-#     for end users
+#   - Binary: no NSIS under it anymore - the installer builder is dev-only and
+#     lives in .github\Source\NSIS (never copied into the payload)
 #   - Config: exclude anything under .temp / .release / stage (never ship
 #     build scratch dirs)
 Copy-Item (Join-Path $root "Config")  (Join-Path $payload "Config")  -Recurse
 Copy-Item (Join-Path $root "Binary")  (Join-Path $payload "Binary")  -Recurse
-Remove-Item (Join-Path $payload "Binary\NSIS") -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item (Join-Path $payload "Config\.temp") -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item (Join-Path $payload "Config\.release") -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item (Join-Path $payload "Config\stage") -Recurse -Force -ErrorAction SilentlyContinue
 Remove-Item (Join-Path $payload "Config\KmpCache") -Recurse -Force -ErrorAction SilentlyContinue
+# AIShell* files carry per-user secrets, settings and command history
+# (AIShell.ini / AIShell.history / ...) - strip them all from the release
+# payload only; the live environment keeps its own copies untouched.
+Get-ChildItem (Join-Path $payload "Config") -Filter "AIShell*" -File -ErrorAction SilentlyContinue |
+    Remove-Item -Force -ErrorAction SilentlyContinue
 # ensure FirstRun=yes in the shipped Kernel.ini so a fresh install triggers
 # the welcome guide (kmd-welcome) on first launch; kInitrd rewrites it to
 # FirstRun=no after the guide completes.
@@ -100,11 +170,38 @@ if (Test-Path $payloadKernel) {
     if ($kcontent -notcontains "FirstRun=yes") { $kcontent += "FirstRun=yes" }
     Set-Content $payloadKernel $kcontent -Encoding ASCII
 }
-# built-in Init.d keeps ONLY the cache-clean loader; every other module
+# built-in Init.d keeps the loaders of CORE modules - those whose Module dir
+# carries a .KmdCore marker - plus the cache-clean loader; every other module
 # loader is created by kmod-setup when its kmp gets installed (user-selectable)
+$coreModuleDirs = @(Get-ChildItem (Join-Path $root "Module") -Directory -Force -ErrorAction SilentlyContinue |
+    Where-Object { Test-Path (Join-Path $_.FullName ".KmdCore") } |
+    ForEach-Object { $_.Name })
+$coreLoaders = @{}
+foreach ($dir in $coreModuleDirs) {
+    Get-ChildItem (Join-Path $root "Config\Init.d") -Filter *.cmd -ErrorAction SilentlyContinue |
+        Where-Object { (Get-Content $_.FullName -TotalCount 1) -match "directory=$([regex]::Escape($dir))([\s]|$)" } |
+        ForEach-Object { $coreLoaders[$_.Name] = $true }
+}
+$coreLoaders["90-z-cache-clean.cmd"] = $true   # cache-clean dispatcher is always shipped
+$coreLoaders["99-cache-clean.cmd"]   = $true   # (both possible file names)
 Get-ChildItem (Join-Path $payload "Config\Init.d") -Filter *.cmd |
-    Where-Object { $_.Name -ne "90-z-cache-clean.cmd" } |
+    Where-Object { -not $coreLoaders.ContainsKey($_.Name) } |
     Remove-Item -Force
+Write-Host "  core module loaders kept: $($coreLoaders.Keys -join ', ')" -ForegroundColor DarkGray
+
+# ship the Module directories of core modules too, so the kept loaders can
+# actually resolve %MOD_ROOT%\<dir> on a fresh install
+if ($coreModuleDirs.Count -gt 0) {
+    $payloadMod = Join-Path $payload "Module"
+    New-Item -ItemType Directory -Force -Path $payloadMod | Out-Null
+    foreach ($dir in $coreModuleDirs) {
+        $srcMod = Join-Path $root "Module\$dir"
+        if (Test-Path $srcMod) {
+            Write-Host "  core module dir: $dir" -ForegroundColor DarkGray
+            Copy-Item $srcMod (Join-Path $payloadMod $dir) -Recurse -Force
+        }
+    }
+}
 foreach ($f in @("kBash.bat","kCmd.bat","kInitrd.cmd","kmd.exe","kRun.exe","icon.ico","README.md","README.CN.md")) {
     $src = Join-Path $root $f
     if (Test-Path $src) { Copy-Item $src (Join-Path $payload $f) -Force }
@@ -165,7 +262,7 @@ Write-Host "  history & cache purged" -ForegroundColor DarkGray
 # exec'ing process is not the file owner. Restore 755 semantics on everything
 # (dirs included) so the installed base is executable for all users.
 $payloadUnix = $payload.ToLower() -replace '\\','/' -replace '^([a-z]):', '/mnt/$1'
-& $bash -c "chmod -R u+rwx,go+rx '$payloadUnix'" 2>&1 | Out-Null
+& $bash -c "export PATH=/bin:/usr/bin; chmod -R u+rwx,go+rx '$payloadUnix'" 2>&1 | Out-Null
 $payloadSize = (Get-ChildItem $payload -Recurse -File | Measure-Object Length -Sum).Sum
 Write-Host ("  base payload: {0:N1} MB ({1} files)" -f ($payloadSize/1MB), (Get-ChildItem $payload -Recurse -File).Count)
 
@@ -202,8 +299,44 @@ foreach ($m in $loaders) {
 # ---------------------------------------------------------------- 3. registry.kp
 Write-Host "`n[3/5] generating registry.kp ..."
 if ($SkipKmp) {
-    Write-Host "  (skipped by -SkipKmp)"
+    Write-Host "  (skipped by /skipkmp)"
 } else {
+# module annotation file: look for an explicit /desc= first, then the
+# repository copy (.github\Source\registry-desc.ini), then Source\.
+function Resolve-ModuleDesc {
+    param([hashtable]$map, [string]$section)
+    if ($map.ContainsKey($section)) { return $map[$section] }
+    $base = $section
+    # strip the version suffix: trailing "-latest" or "-<number[.more]>" so a
+    # versioned/rolling section (php-8.5.1, golang-latest) resolves to the
+    # annotation key of its base module.
+    if ($base -match '^(.*)-(latest|[0-9][0-9.]*)$') { $base = $Matches[1] }
+    if ($map.ContainsKey($base)) { return $map[$base] }
+    return $null
+}
+$descMap = @{}
+$descSrc = $null
+foreach ($cand in @(
+        $(if ($opt.Desc) { $opt.Desc } else { $null }),
+        $(if ($opt.Desc) { Join-Path $root $opt.Desc } else { $null }),
+        (Join-Path $root ".github\Source\registry-desc.ini"),
+        (Join-Path $root "Source\registry-desc.ini"))) {
+    if ($cand -and (Test-Path $cand)) { $descSrc = $cand; break }
+}
+if ($descSrc) {
+    foreach ($line in (Get-Content $descSrc -ErrorAction SilentlyContinue)) {
+        $line = $line.Trim()
+        if (-not $line -or $line.StartsWith('#')) { continue }
+        $i = $line.IndexOf('=')
+        if ($i -lt 0) { continue }
+        $k = $line.Substring(0, $i).Trim()
+        $v = $line.Substring($i + 1).Trim()
+        if ($k) { $descMap[$k] = $v }
+    }
+    Write-Host "  annotations: $descSrc ($($descMap.Count) entries)" -ForegroundColor DarkGray
+} else {
+    Write-Host "  annotations: none (no registry-desc.ini found)" -ForegroundColor DarkGray
+}
 $sb = New-Object System.Text.StringBuilder
 foreach ($f in (Get-ChildItem (Join-Path $rel "kmp") -Filter *.kmp)) {
     $h = (Get-FileHash $f.FullName -Algorithm SHA256).Hash.ToLower()
@@ -221,6 +354,8 @@ foreach ($f in (Get-ChildItem (Join-Path $rel "kmp") -Filter *.kmp)) {
     # GitHub flattens release assets to the archive root (no sub-dirs), so the
     # registry must reference the bare asset name - "kmp/x.kmp" would 404.
     [void]$sb.AppendLine("file=$($f.Name)")
+    $desc = Resolve-ModuleDesc $descMap $name
+    if ($desc) { [void]$sb.AppendLine("description=$desc") }
     [void]$sb.AppendLine("")
 }
 [void]$sb.AppendLine("[global]")
@@ -228,7 +363,7 @@ foreach ($f in (Get-ChildItem (Join-Path $rel "kmp") -Filter *.kmp)) {
 [void]$sb.AppendLine("generated=$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')")
 $regPath = Join-Path $rel "registry.kp"
 [System.IO.File]::WriteAllText($regPath, $sb.ToString())
-Write-Host "  registry.kp written ($((Get-ChildItem (Join-Path $rel 'kmp') -Filter *.kmp).Count) packages)"
+Write-Host ("  registry.kp written ({0} packages, {1} annotations)" -f (Get-ChildItem (Join-Path $rel 'kmp') -Filter *.kmp).Count, $descMap.Count)
 }
 
 # ---------------------------------------------------------------- 4. NSIS installer

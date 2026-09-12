@@ -54,16 +54,16 @@ Copyright(c) xRetia Labs.
 
 User             : demo@MYPC
 OS               : Komandare
-System Version   : 4.0.2026.0910
+System Version   : 4.2.2026.0911
 Kernel           : CYGWIN 3.6.6
 Shell            : Komandare Shell
 WCmdBox          : 20.08.1
-Unique Libs      : /kbin [adb, apt-cyg, attrib, binwalk, dir, fastboot, jefferson, killall, kmd-welcome, kmod-setup, mklink, mkrootfs, neofetch, phptest, poweroff, ps, reboot, reset, runas_root, runas_user, su, sudo, top, unroot, ver, version, wcmdbox]
+Unique Libs      : /kbin [aishell, adb, apt-cyg, attrib, binwalk, dir, fastboot, jefferson, killall, kmd-welcome, kmod-setup, mklink, mkrootfs, neofetch, phptest, poweroff, ps, reboot, reset, runas_root, runas_user, service, su, sudo, top, unroot, ver, version, vihost, wcmdbox]
 Project          : https://github.com/xRetia/Komandare
 
 ------------------------------------------------------------
 Welcome to Komandare!
-Komandare Version: 4.0.2026.0910
+Komandare Version: 4.2.2026.0911
 Copyright (c)2026 xRetia Labs
 ```
 
@@ -81,6 +81,8 @@ Copyright (c)2026 xRetia Labs
 kRun code .
 ```
 
+`kRun` 不带参数时弹出类 Windows「运行」对话框（左下角定位、带 Komandare 图标），输入任意命令即以相同完整环境启动。该二进制由 `Source/kRun.c`（C 语言、零 CRT 原生 PE）经 `Source/build_krun.ps1` 编译产出。
+
 **kCmd / kBash —— 在其他终端里启用 kmd 环境。** 人已经坐在 PowerShell、Windows Terminal、ConEmu 或 CMD 里了？`kCmd` 和 `kBash` 直接在当前窗口给你一个完整引导的 Komandare shell，不用新开窗口：
 
 ```bat
@@ -89,6 +91,12 @@ kBash           :: 进入带 kmd 环境的 bash
 ```
 
 **kmd —— 推荐启动器。** 双击 `kmd.exe` 得到一个完整的 Komandare 终端：优先用 Windows Terminal（≥ 1.60）承载，缺失时回退到内置的 ConEmu 构建；并通过 WT *profile Fragment* 注入路径转换 —— 往终端里拖文件自动变成 `/mnt/c/...`，且**不碰**你的 WT settings.json。
+
+**AI Shell —— 自然语言转 shell 命令。** `aishell` 通过 OpenAI 兼容 API，将自然语言（中文或英文）描述翻译成 shell 命令。描述你想要的操作，即可获得建议的命令，并可选择 `RUN` 确认后执行。在 `Config/AIShell.ini` 中配置 API 端点和模型：
+
+```bash
+aishell "查找过去7天内修改的所有日志文件，按大小排序"
+```
 
 ---
 
@@ -183,11 +191,9 @@ kRun <任意程序.exe> <参数>   :: 任意编辑器 / IDE / 调试器 / 工具
 | `RawCap.exe` | 抓取本机网卡原始流量存为 pcap |
 | `streams.exe` / `streams64.exe` | 剥离 NTFS 备用数据流（Mark-of-the-Web） |
 | `cygwin-setup.exe` | 官方 Cygwin `setup-x86_64.exe`（完整包管理） |
-| `NSIS/` | Nullsoft 安装程序制作器 —— `makensis` |
 | `composer.bat`（+ `.phar`） | PHP 依赖管理器（PATH 里的 `composer`） |
 | `phpunit.bat`（+ `.phar`） | PHPUnit 测试运行器 |
 | `binwalk.bat` / `jefferson.bat` | 固件提取与文件系统分析（`Module/` 内 Python 工具的前端） |
-| `service.bat` | 服务管理器分发器（见「服务管理」） |
 | `desktopini.bat` | 交互式给文件夹设置显示名 / 图标（写 `desktop.ini`） |
 | `pptp-dial.bat`（+ `pptp.pbk`） | 拨号 / 断开 PPTP VPN（`dial <地址> <用户> <密码>` / `disconnect`） |
 | `MoveLater.exe` | 把文件删除推迟到下次重启执行 |
@@ -217,6 +223,7 @@ kRun <任意程序.exe> <参数>   :: 任意编辑器 / IDE / 调试器 / 工具
 | 模块 | 提供什么 |
 | --- | --- |
 | `7zip` | 7-Zip 压缩（`7z`、`7za`） |
+| `aishell` | AI 自然语言转 shell 命令翻译器 |
 | `adb` / `fastboot` | Android 设备桥接与 bootloader 工具 |
 | `dig` | DNS 查询工具 |
 | `git` | Git（优先复用 Git for Windows，缺失回退内置 Cygwin git） |
@@ -238,6 +245,7 @@ kRun <任意程序.exe> <参数>   :: 任意编辑器 / IDE / 调试器 / 工具
 | `squashfs-tools` | `mksquashfs` / `unsquashfs` 文件系统工具 |
 | `unzip` | ZIP 解压 |
 | `vbox-helper` | VirtualBox headless 辅助（Docker 虚拟机支持） |
+| `vbox` | VirtualBox 运行体 |
 | `windows-driver-sign` | 签名 Windows 驱动（WHQL / 自签名） |
 | `z-cache-clean` | 启动时缓存自维护（见上文） |
 
@@ -245,7 +253,7 @@ kRun <任意程序.exe> <参数>   :: 任意编辑器 / IDE / 调试器 / 工具
 
 ## kmod-setup —— 模块包管理器
 
-模块由内置 `/kbin` 命令 `kmod-setup` 管理：
+模块由内置 `/kbin` 命令 `kmod-setup` 管理（**当前 v4.3.0**）：
 
 ```bash
 kmod-setup list                  # 列出已注册模块
@@ -264,7 +272,19 @@ kmod-setup remove <name>         # 注销模块（保留 Module/<目录>）
 - `.kmp` 包是普通 zip（`kmp.ini` + `loader.cmd` + `module/`）—— 可手工构造，远端拉取会校验 sha256；
 - `mirror` 切换下载基址（默认 `github.com/xRetia/komandare-mod-pkgs` 的 latest release），内网/离线环境很实用。
 
-当前内置模块：7zip、adb、dig、git（优先复用 Git for Windows，缺失回退内置 Cygwin git）、golang、gradle、gsudo、iperf3、lessc、nodejs、ntr、php、pstop、python3x、qemu、ruby4、selfsign-ssl、socat、squashfs-tools、unzip、vbox-helper、windows-driver-sign、z-cache-clean。
+**v4.3.0 兼容性亮点：**
+- **registry.kp v2 格式** — 支持 `[global] kmpbase=` / `scriptbase=` 基址覆盖；相对路径按镜像解析，绝对 URL 原样透传。
+- **多镜像支持** — `Config/Registry.ini` 中每个 `mirror=` 行按序尝试，最后一个生效。
+- **根布局包** — `kmp.ini` 中 `root=yes` 直接解包到 `KMD_ROOT`，全程零 Cygwin fork（规避内存压力下的 `dll data read copy failed`）。
+- **`-latest` 冲突检测** — 安装 `-latest` 包前，提示移除同工具的老版本。
+- **安装钩子** — 按扩展名分发 `.sh` / `.ps1` / `.cmd` 钩子；钩子失败则清空载荷并中止安装。
+- **依赖支持** — `kmp.ini` / registry 中的 `depends=`，带循环检测，隔离子 shell 安装。
+- **离线容错刷新** — TTL 缓存（默认 600 s），离线时回退到过期缓存。
+- **GitHub 发布资产扁平化** — `file=kmp/x.kmp` 返回 404 时按镜像根目录重试裸文件名。
+- **Busybox unzip 兜底** — 无完整工具链时核心装包仍可解包 `.kmp`。
+- **`.KmdCore` 保护** — `remove` 拒绝删除系统模块。
+
+当前内置模块：7zip、aishell、adb、dig、git（优先复用 Git for Windows，缺失回退内置 Cygwin git）、golang、gradle、gsudo、iperf3、lessc、nodejs、ntr、php、pstop、python3x、qemu、ruby4、selfsign-ssl、socat、squashfs-tools、unzip、vbox、vbox-helper、windows-driver-sign、z-cache-clean。
 
 ---
 
@@ -288,6 +308,8 @@ kmod-setup remove <name>         # 注销模块（保留 Module/<目录>）
 | `binwalk` / `jefferson` | 固件分析 |
 | `phptest` | PHP 快速草稿：`nano` 打开临时 `.php`，保存后直接运行 |
 | `wcmdbox` / `mobabox` | Komandare 工具盒（从 Unix 路径跑 Windows 工具） |
+| `service` | 服务管理器分发器——解析 `Config/Service/<名字>.bat` 并执行动作 |
+| `vihost` | 以 root 权限用 `nano` 打开 `/etc/hosts`（需 `sudo`） |
 | `poweroff` / `reboot` / `reset` | 快捷系统操作 |
 | `attrib` / `dir` / `mklink` | 经 wcmdbox 桥接的 Windows 文件系统命令 |
 
@@ -320,7 +342,7 @@ doskey 宏来自 `SystemAliases.ini`（系统）+ `UserAliases.ini`（你的）�
 
 ## 服务管理
 
-`service`（在 `Binary/`）是个极简服务管理器：
+`service`（内置 `/kbin` 命令）是个极简服务管理器，解析 `Config/Service/<名字>.bat` 并执行动作：
 
 ```bat
 service docker start       :: 启动 Docker 虚拟机（VirtualBox headless）

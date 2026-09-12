@@ -1,0 +1,43 @@
+#include <windows.h>
+
+#define IDD_KRUN 101
+
+200 ICON "..\\..\\icon.ico"
+
+IDD_KRUN DIALOGEX 0, 0, 176, 66
+STYLE DS_MODALFRAME | DS_SETFONT | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Komandare"
+FONT 9, "Microsoft YaHei UI", 400, 0, 0x1
+BEGIN
+    LTEXT "", 1001,  12, 10, 152, 10
+    EDITTEXT 1002,  12, 22, 152, 14, ES_AUTOHSCROLL
+    DEFPUSHBUTTON "OK", IDOK, 60, 43, 48, 13
+    PUSHBUTTON "Cancel", IDCANCEL, 112, 43, 48, 13
+END
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 5,2,0,0
+ PRODUCTVERSION 5,2,0,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "FileDescription", "Komandare run launcher"
+            VALUE "FileVersion", "5.2.0.0"
+            VALUE "InternalName", "kRun"
+            VALUE "OriginalFilename", "kRun.exe"
+            VALUE "ProductName", "Komandare"
+            VALUE "ProductVersion", "5.2.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0804, 1200
+    END
+END
