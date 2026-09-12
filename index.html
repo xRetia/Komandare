@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Komandare — UserLand Linux for Windows</title>
-<meta name="description" content="Komandare: a UserLand Linux distribution built on the Cygwin kernel. One folder, full Unix userland and dev toolchains, zero traces on the host.">
-<meta property="og:title" content="Komandare — UserLand Linux for Windows">
-<meta property="og:description" content="A UserLand Linux distribution for Windows, built on the Cygwin kernel. One folder, full Unix userland, zero traces on the host.">
+<title>Komandare — Portable Windows Development Sandbox</title>
+<meta name="description" content="Komandare: a portable Windows development sandbox. Use kRun to inject Cygwin, Bash, and toolchains into any IDE from one movable folder.">
+<meta property="og:title" content="Komandare — Portable Windows Development Sandbox">
+<meta property="og:description" content="A portable Windows development sandbox: kRun injects Cygwin, Bash, and toolchains into any IDE from one movable folder.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://komandare.github.io/">
 <meta property="og:image" content="https://komandare.github.io/Source/logo.png">
@@ -332,9 +332,9 @@
 <header class="hero">
   <img class="logo" src="Source/logo.png" alt="Komandare logo">
   <h1><span class="k">K</span>omandare</h1>
-  <p class="tagline" data-zh="&lt;b&gt;UserLand Linux for Windows&lt;/b&gt; —— 基于 Cygwin 内核的开发者发行版。&lt;br&gt;一个文件夹，完整 Unix 用户态与工具链，&lt;b&gt;主机零痕迹&lt;/b&gt;。">
-    <b>UserLand Linux for Windows</b> — a developer distro built on the Cygwin kernel.<br>
-    One folder, full Unix userland &amp; toolchains, <b>zero traces on the host</b>.
+  <p class="tagline" data-zh="&lt;b&gt;Windows 上的可移动开发沙箱&lt;/b&gt; —— 用 &lt;code&gt;kRun&lt;/code&gt; 把 Cygwin、Bash 和工具链注入任意 IDE。&lt;br&gt;一个文件夹，重装系统或迁移开发环境都更容易。">
+    <b>A portable Windows development sandbox</b> — use <code>kRun</code> to inject Cygwin, Bash, and toolchains into any IDE.<br>
+    One folder makes reinstalling Windows or moving your dev environment much easier.
   </p>
   <div class="badges">
     <img src="https://badgen.net/github/tag/xRetia/Komandare?label=Latest%20Version&amp;color=blueviolet" alt="Latest Version">
@@ -349,27 +349,27 @@
 
 <!-- features -->
 <section id="features">
-  <h2 class="sec" data-zh="真正的发行版，不是套壳">A Real Distro, Not a Wrapper</h2>
+  <h2 class="sec" data-zh="先理解核心：把开发环境注入你的工具">The Core Idea: Bring the Environment to Your Tools</h2>
   <div class="grid">
     <div class="card feature">
-      <h3><span class="dot" style="background:var(--accent)"></span><span data-zh="内核：Cygwin">Kernel: Cygwin</span></h3>
-      <p data-zh="UserLand Linux 发行版：内核是 Cygwin，用户态为开发者精心整合 —— bash、vim、git、curl、gcc 工具链、apt-cyg 包管理，一应俱全。">A UserLand Linux distribution: Cygwin as the kernel, a developer-curated userland — bash, vim, git, curl, gcc toolchains and apt-cyg package management, all bundled.</p>
+      <h3><span class="dot" style="background:var(--pink)"></span><span data-zh="kRun：把环境注入 IDE">kRun: Inject the Environment</span></h3>
+      <p data-zh="&lt;code&gt;kRun code .&lt;/code&gt; 先引导 Komandare，再启动 VS Code 或任意 IDE；目标程序直接看到 PATH、工具链变量、缓存和模块。"><code>kRun code .</code> boots Komandare first, then launches VS Code or any IDE with its PATH, toolchain variables, caches, and modules.</p>
     </div>
     <div class="card feature">
       <h3><span class="dot" style="background:var(--green)"></span><span data-zh="主机零污染">Zero Host Pollution</span></h3>
       <p data-zh="npm / pnpm / pip / playwright / Go 模块缓存、Gradle 用户目录、Ruby gems —— 全部收口到 Komandare 目录树内部。删掉文件夹，主机跟没装过一样。">npm / pnpm / pip / playwright / Go module caches, Gradle user dirs, Ruby gems — everything stays inside the Komandare tree. Delete the folder and the host looks untouched.</p>
     </div>
     <div class="card feature">
-      <h3><span class="dot" style="background:var(--pink)"></span><span data-zh="kRun · 带环境跑 IDE">kRun · Launch IDEs with Env</span></h3>
-      <p data-zh="&lt;code&gt;kRun code .&lt;/code&gt; —— 注入完整工具链后启动任意第三方程序。VSCode 等 IDE 直接看到整个 Komandare 环境。"><code>kRun code .</code> — injects the complete toolchain before launching any third-party program. VSCode and other IDEs see the whole Komandare environment.</p>
+      <h3><span class="dot" style="background:var(--accent)"></span><span data-zh="可移动：一棵目录树">Portable: One Directory Tree</span></h3>
+      <p data-zh="路径以自身位置为锚点。复制到别的盘符或机器，工具链、缓存和配置跟着走，不必重建开发环境。">Paths are anchored to the tree itself. Move it to another drive or machine and the toolchains, caches, and settings come with it.</p>
     </div>
     <div class="card feature">
       <h3><span class="dot" style="background:var(--accent)"></span><span data-zh="AI Shell · 自然语言转命令">AI Shell · NL to Commands</span></h3>
       <p data-zh="&lt;code&gt;aishell&lt;/code&gt; —— 用自然语言描述需求，自动生成 shell 命令，&lt;code&gt;RUN&lt;/code&gt; 确认后执行。支持中文与英文。"><code>aishell</code> — describe what you need in natural language and get a shell command, executed after a <code>RUN</code> confirmation. Works in Chinese and English.</p>
     </div>
     <div class="card feature">
-      <h3><span class="dot" style="background:var(--accent-2)"></span><span data-zh="便携模块">Portable Modules</span></h3>
-      <p data-zh="工具链以可移植模块组织（Module/），kmod-setup 一键安装卸载。整个目录树可随意移动，甚至跨盘符。">Toolchains are organized as portable modules (Module/), installed and removed by kmod-setup in one command. The whole tree moves freely — even across drives.</p>
+      <h3><span class="dot" style="background:var(--accent-2)"></span><span data-zh="Cygwin + Bash 工具链">Cygwin + Bash Toolchain</span></h3>
+      <p data-zh="完整 Unix 用户态、Bash、/kbin、apt-cyg，以及 Node、Python、Go、PHP、Ruby 等可选模块都在同一套引导环境中。">A complete Unix userland, Bash, /kbin, apt-cyg, and optional Node, Python, Go, PHP, and Ruby modules share one booted environment.</p>
     </div>
   </div>
 </section>
@@ -478,11 +478,11 @@
   <h2 class="sec" data-zh="下载">Download</h2>
   <div class="dl-grid">
     <div class="card dl-card">
-      <div class="ver">stable · v4.2.2026.0911</div>
+      <div class="ver">stable · v5.2.2026.0912</div>
       <h3 data-zh="Windows 安装器">Windows Installer</h3>
       <p data-zh="NSIS 安装器，内置完整基础运行时（Unixlike + Config + Binary + 启动器），模块按需安装。">NSIS installer bundling the full base runtime (Unixlike + Config + Binary + launchers); modules are installed on demand.</p>
       <div class="btn-row">
-        <a class="dl-btn" href="https://github.com/xRetia/Komandare/releases/latest" data-zh="下载 Setup.exe">Download Setup.exe</a>
+        <a class="dl-btn" href="https://github.com/xRetia/Komandare/releases/tag/5.2.2026.0912" data-zh="下载 Setup.exe">Download Setup.exe</a>
       </div>
       <div class="note" data-zh="模块包（.kmp）与模块索引（registry.kp）亦在 Release 发布，安装后由 kmod-setup 自动拉取。">Module packages (.kmp) and the module index (registry.kp) are also published on Releases, pulled automatically by kmod-setup after install.</div>
     </div>
@@ -637,11 +637,11 @@
     var title = document.querySelector('title');
     var desc = document.querySelector('meta[name="description"]');
     if (l === 'zh') {
-      title.textContent = 'Komandare —— UserLand Linux for Windows';
-      desc.setAttribute('content', 'Komandare：基于 Cygwin 内核的 UserLand Linux 发行版，一个文件夹，完整 Unix 用户态与开发工具链，主机零痕迹。');
+      title.textContent = 'Komandare —— Windows 可移动开发沙箱';
+      desc.setAttribute('content', 'Komandare：Windows 上的可移动开发沙箱，用 kRun 将 Cygwin、Bash 和工具链注入任意 IDE。');
     } else {
-      title.textContent = 'Komandare — UserLand Linux for Windows';
-      desc.setAttribute('content', 'Komandare: a UserLand Linux distribution built on the Cygwin kernel. One folder, full Unix userland and dev toolchains, zero traces on the host.');
+      title.textContent = 'Komandare — Portable Windows Development Sandbox';
+      desc.setAttribute('content', 'Komandare: a portable Windows development sandbox. Use kRun to inject Cygwin, Bash, and toolchains into any IDE from one movable folder.');
     }
     var docs = document.querySelectorAll('.docs-link');
     for (var j = 0; j < docs.length; j++) {
