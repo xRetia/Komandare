@@ -1,14 +1,3 @@
----
-AIGC:
-  ContentProducer: '001191110102MAD55U9H0F10002'
-  ContentPropagator: '001191110102MAD55U9H0F10002'
-  Label: '1'
-  ProduceID: '0875261c-9b66-4182-9643-b3f1164d05ae'
-  PropagateID: '0875261c-9b66-4182-9643-b3f1164d05ae'
-  ReservedCode1: '8bba993a-61cf-4857-97d7-8cf719d51ec0'
-  ReservedCode2: '8bba993a-61cf-4857-97d7-8cf719d51ec0'
----
-
 <h1 align="center">Komandare</h1>
 
 <p align="center"><img src="./Source/logo.png" alt="Komandare logo" width="120" /></p>
