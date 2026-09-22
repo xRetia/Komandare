@@ -1,3 +1,14 @@
+---
+AIGC:
+  ContentProducer: '001191110102MAD55U9H0F10002'
+  ContentPropagator: '001191110102MAD55U9H0F10002'
+  Label: '1'
+  ProduceID: 'a18ac3ec-4f95-41fc-937f-d870a5bec6af'
+  PropagateID: 'a18ac3ec-4f95-41fc-937f-d870a5bec6af'
+  ReservedCode1: '11c9f923-6813-4e67-846f-748433f44299'
+  ReservedCode2: '11c9f923-6813-4e67-846f-748433f44299'
+---
+
 <h1 align="center">Komandare</h1>
 
 <p align="center"><img src="./Source/logo.png" alt="Komandare logo" width="120" /></p>
@@ -73,7 +84,7 @@ kInitrd.cmd bash -c "git status"
 
 ## 安装与首次运行
 
-1. 从 5.2 release 下载 **[Komandare-Setup-5.2.2026.0912.exe](https://github.com/xRetia/Komandare/releases/tag/5.2.2026.0912)**。
+1. 从 5.4 release 下载 **[Komandare-Setup-5.4.2026.0922.exe](https://github.com/xRetia/Komandare/releases/tag/5.4.2026.0922)**。
 2. 安装到你控制的目录。安装器包含基础运行时，可选模块在安装后下载。
 3. 首次运行 `kmd.exe`，在 `kmd-welcome` 中选择模块，或手动安装：
 
@@ -168,7 +179,7 @@ Komandare 不是 VM、WSL 发行版或安全边界。它使用 Cygwin 用户态�
 
 ## 源码与发布
 
-- **最新版本：** [Komandare 5.2](https://github.com/xRetia/Komandare/releases/tag/5.2.2026.0912)
+- **最新版本：** [Komandare 5.4](https://github.com/xRetia/Komandare/releases/tag/5.4.2026.0922)
 - **主页：** <https://komandare.github.io/>
 - **仓库：** <https://github.com/xRetia/Komandare>
 - **厂商：** xRetia Labs
@@ -176,3 +187,5 @@ Komandare 不是 VM、WSL 发行版或安全边界。它使用 Cygwin 用户态�
 本仓库包含主页、文档、启动器源码和发布脚本。完整运行时目录树通过安装器和模块包分发，不提交到仓库。
 
 *Copyright (c) 2020–2026 xRetia Labs. All rights reserved.*
+
+> AI生成

@@ -1,3 +1,14 @@
+---
+AIGC:
+  ContentProducer: '001191110102MAD55U9H0F10002'
+  ContentPropagator: '001191110102MAD55U9H0F10002'
+  Label: '1'
+  ProduceID: '0875261c-9b66-4182-9643-b3f1164d05ae'
+  PropagateID: '0875261c-9b66-4182-9643-b3f1164d05ae'
+  ReservedCode1: '8bba993a-61cf-4857-97d7-8cf719d51ec0'
+  ReservedCode2: '8bba993a-61cf-4857-97d7-8cf719d51ec0'
+---
+
 <h1 align="center">Komandare</h1>
 
 <p align="center"><img src="./Source/logo.png" alt="Komandare logo" width="120" /></p>
@@ -73,7 +84,7 @@ All launchers converge on `kInitrd.cmd`, so a shell and an IDE launched with `kR
 
 ## Install and first run
 
-1. Download **[Komandare-Setup-5.2.2026.0912.exe](https://github.com/xRetia/Komandare/releases/tag/5.2.2026.0912)** from the 5.2 release.
+1. Download **[Komandare-Setup-5.4.2026.0922.exe](https://github.com/xRetia/Komandare/releases/tag/5.4.2026.0922)** from the 5.4 release.
 2. Install it to a directory you control. The base runtime is included; optional modules are fetched after installation.
 3. Start `kmd.exe` once and choose modules in `kmd-welcome`, or install them explicitly:
 
@@ -168,7 +179,7 @@ Komandare is not a VM, WSL distribution, or security boundary. It uses Cygwin us
 
 ## Source and release
 
-- **Latest release:** [Komandare 5.2](https://github.com/xRetia/Komandare/releases/tag/5.2.2026.0912)
+- **Latest release:** [Komandare 5.4](https://github.com/xRetia/Komandare/releases/tag/5.4.2026.0922)
 - **Homepage:** <https://komandare.github.io/>
 - **Repository:** <https://github.com/xRetia/Komandare>
 - **Vendor:** xRetia Labs
@@ -176,3 +187,5 @@ Komandare is not a VM, WSL distribution, or security boundary. It uses Cygwin us
 The repository contains the homepage, documentation, launcher sources, and release scripts. The full runtime tree is distributed through the installer and module packages rather than committed here.
 
 *Copyright (c) 2020–2026 xRetia Labs. All rights reserved.*
+
+> AI生成
